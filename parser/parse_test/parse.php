@@ -31,14 +31,19 @@
     function write_var($xml, $rank, $instruction, $str) {
         $arg_rank = "arg$rank";
 
-        # checking the var
+        # checking the variable 
         if (preg_match('/^(GF|LF|TF)@([a-zA-Z0-9-_&%$*!?]+)$/', $str) == false) {
-            fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong <var> as the argument of the instruction <DEFVAR>\n");
+            fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong <var> as the argument of the instruction\n");
             exit(23);
         }
-        
+
+        # checking the variable name -> first symbol after @ can't be number (edge case)
+        if (preg_match('/^(GF|LF|TF)@[0-9]/', $str) == true) {
+            fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong <var> as the argument of the instruction\n");
+            exit(23);
+        }
         #print("str = "); print($str); print("\n");
-        $arg = $xml->createElement($arg_rank, $str);
+        $arg = $xml->createElement($arg_rank, htmlentities($str));
         $arg->setAttribute('type', 'var');
         $instruction->appendChild($arg);
     }
@@ -163,13 +168,10 @@
     for ($i = 0; $i < count($file); $i++) {
         $file[$i] = trim($file[$i]);
         $file[$i] = preg_replace('/#.*/', '', $file[$i]);
+        # removing empty spaces
         $file[$i] = preg_replace('/\s+/', ' ', $file[$i]);
-#        print($file[$i]);
-#        print(" - strlen = "); print(strlen($file[$i]));
-#        print("\n");
     }
 
-#    print("\n");
 
 
     # reading the header of the file
@@ -241,297 +243,94 @@
             $instruction->setAttribute('order', $j);
             $str = explode(" ", $file[$i]);
 
+            # make <instruction> all uppercase
+            $str[0] = strtoupper($str[0]);
+
+            # for debugging
+            $tmpinstr = $str[0];
+            $tmpstr = $file[$i];
+            $tmpnum = count($str);
+            fwrite(STDERR, " instr: $tmpinstr,  str: $tmpstr,  num: $tmpnum\n");
+
             # parsing the instructions
-            switch ($file[$i]) {
+            switch ($str[0]) {
 
-                # frames/function_calls/variables instructions
-                ## MOVE
-                case (preg_match('/^MOVE/', $file[$i]) ? true : false) :
-                    if (empty($str[3])) {
-                        $instruction->setAttribute('opcode', 'MOVE');
-                        write_var($xml, '1', $instruction, $str[1]);
-                        write_symb($xml, '2', $instruction, $str[2]);
+                # <instruction>
+                ## CREATEFRAME, PUSHFRAME, POPFRAME, RETURN, BREAK
+                case 'CREATEFRAME':
+                case 'PUSHFRAME':
+                case 'POPFRAME':
+                case 'RETURN':
+                case 'BREAK':  
+
+                    # checking the number of arguments
+                    if  ((empty($str[1])) && (!empty($str[0]))) {
+                        $instruction->setAttribute('opcode', $str[0]);
                     } else {
                         fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
                         exit(23);
                     }
-                    break;  
-                
-                ## CREATEFRAME
-                case (preg_match('/^CREATEFRAME/', $file[$i]) ? true : false) :
+                    break;                    
 
-                    if (empty($str[1])) {
-                        $instruction->setAttribute('opcode', 'CREATEFRAME');
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-            
-                ## PUSHFRAME
-                case (preg_match('/^PUSHFRAME/', $file[$i]) ? true : false) :
 
-                    if (empty($str[1])) {
-                        $instruction->setAttribute('opcode', 'PUSHFRAME');
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
-                ## POPFRAME
-                case (preg_match('/^POPFRAME/', $file[$i]) ? true : false) :
+                # <instruction> <var>
+                ## DEFVAR, POPS
+                case 'DEFVAR':
+                case 'POPS': 
 
-                    if (empty($str[1])) {
-                        $instruction->setAttribute('opcode', 'POPFRAME');
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
-                ## DEFVAR
-                case (preg_match('/^DEFVAR/', $file[$i]) ? true : false) :
-
-                    if (empty($str[2])) {
-                        $instruction->setAttribute('opcode', 'DEFVAR');
+                    # checking the number of arguments
+                    if ((empty($str[2])) && (!empty($str[1]))) {
+                        $instruction->setAttribute('opcode', $str[0]);
                         write_var($xml, '1', $instruction, $str[1]);
                     } else {
                         fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
                         exit(23);
                     }
-                    break;
-                
-                ## CALL
-                case (preg_match('/^CALL/', $file[$i]) ? true : false) :
-                    
-                    if (empty($str[2])) {
-                        $instruction->setAttribute('opcode', 'CALL');
-                        write_label($xml, '1', $instruction, $str[1]);
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
-                ## RETURN
-                case (preg_match('/^RETURN/', $file[$i]) ? true : false) :
-                    
-                    if (empty($str[1])) {
-                        $instruction->setAttribute('opcode', 'RETURN');
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
+                    break;   
 
-                # data_stack instructions
-                ## PUSHS
-                case (preg_match('/^PUSHS/', $file[$i]) ? true : false) :
-                    
-                    if (empty($str[2])) {
-                        $instruction->setAttribute('opcode', 'PUSHS');
+
+                # <instruction> <symb>
+                ## PUSHS, WRITE, EXIT, DPRINT
+                case 'PUSHS':
+                case 'WRITE':
+                case 'EXIT':    
+                case 'DPRINT': 
+
+                    # checking the number of arguments
+                    if  ((empty($str[2])) && (!empty($str[1]))) {
+                        $instruction->setAttribute('opcode', $str[0]);
                         write_symb($xml, '1', $instruction, $str[1]);
                     } else {
                         fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
                         exit(23);
                     }
-                    break;
-                
-                ## POPS
-                case (preg_match('/^POPS/', $file[$i]) ? true : false) :
-                    
-                    if (empty($str[2])) {
-                        $instruction->setAttribute('opcode', 'POPS');
-                        write_var($xml, '1', $instruction, $str[1]);
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
+                    break;                                  
 
-                # arithmetic instructions
-                ## ADD
-                case (preg_match('/^ADD/', $file[$i]) ? true : false) :
-                    
-                    if (empty($str[4])) {
-                        $instruction->setAttribute('opcode', 'ADD');
-                        write_var($xml, '1', $instruction, $str[1]);
-                        write_symb($xml, '2', $instruction, $str[2]);
-                        write_symb($xml, '3', $instruction, $str[3]);
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
-                ## SUB
-                case (preg_match('/^SUB/', $file[$i]) ? true : false) :
-                    
-                    if (empty($str[4])) {
-                        $instruction->setAttribute('opcode', 'SUB');
-                        write_var($xml, '1', $instruction, $str[1]);
-                        write_symb($xml, '2', $instruction, $str[2]);
-                        write_symb($xml, '3', $instruction, $str[3]);
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
-                ## MUL
-                case (preg_match('/^MUL/', $file[$i]) ? true : false) :
-                    
-                    if (empty($str[4])) {
-                        $instruction->setAttribute('opcode', 'MUL');
-                        write_var($xml, '1', $instruction, $str[1]);
-                        write_symb($xml, '2', $instruction, $str[2]);
-                        write_symb($xml, '3', $instruction, $str[3]);
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
-                ## IDIV
-                case (preg_match('/^IDIV/', $file[$i]) ? true : false) :
-                    
-                    if (empty($str[4])) {
-                        $instruction->setAttribute('opcode', 'IDIV');
-                        write_var($xml, '1', $instruction, $str[1]);
-                        write_symb($xml, '2', $instruction, $str[2]);
-                        write_symb($xml, '3', $instruction, $str[3]);
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
 
-                # relational instructions
-                ## LT
-                case (preg_match('/^LT/', $file[$i]) ? true : false) :
-                    
-                    if (empty($str[4])) {
-                        $instruction->setAttribute('opcode', 'LT');
-                        write_var($xml, '1', $instruction, $str[1]);
-                        write_symb($xml, '2', $instruction, $str[2]);
-                        write_symb($xml, '3', $instruction, $str[3]);
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
-                ## GT
-                case (preg_match('/^GT/', $file[$i]) ? true : false) :
-                    
-                    if (empty($str[4])) {
-                        $instruction->setAttribute('opcode', 'GT');
-                        write_var($xml, '1', $instruction, $str[1]);
-                        write_symb($xml, '2', $instruction, $str[2]);
-                        write_symb($xml, '3', $instruction, $str[3]);
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
-                ## EQ
-                case (preg_match('/^EQ/', $file[$i]) ? true : false) :
-                    
-                    if (empty($str[4])) {
-                        $instruction->setAttribute('opcode', 'EQ');
-                        write_var($xml, '1', $instruction, $str[1]);
-                        write_symb($xml, '2', $instruction, $str[2]);
-                        write_symb($xml, '3', $instruction, $str[3]);
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
+                # <instruction> <label>
+                ## CALL, LABEL, JUMP
+                case 'CALL':
+                case 'LABEL':
+                case 'JUMP': 
 
-                # logical instructions
-                ## AND
-                case (preg_match('/^AND/', $file[$i]) ? true : false) :
-
-                    if (empty($str[4])) {
-                        $instruction->setAttribute('opcode', 'AND');
-                        write_var($xml, '1', $instruction, $str[1]);
-                        write_symb($xml, '2', $instruction, $str[2]);
-                        write_symb($xml, '3', $instruction, $str[3]);
+                    # checking the number of arguments
+                    if ((empty($str[2])) && (!empty($str[1]))) {
+                        $instruction->setAttribute('opcode', $str[0]);
+                        write_label($xml, '1', $instruction, $str[1]);
                     } else {
                         fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
                         exit(23);
                     }
-                    break;
-                
-                ## OR
-                case (preg_match('/^OR/', $file[$i]) ? true : false) :
+                    break;               
 
-                    if (empty($str[4])) {
-                        $instruction->setAttribute('opcode', 'OR');
-                        write_var($xml, '1', $instruction, $str[1]);
-                        write_symb($xml, '2', $instruction, $str[2]);
-                        write_symb($xml, '3', $instruction, $str[3]);
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
-                ## NOT
-                case (preg_match('/^NOT/', $file[$i]) ? true : false) :
 
-                    if (empty($str[4])) {
-                        $instruction->setAttribute('opcode', 'NOT');
-                        write_var($xml, '1', $instruction, $str[1]);
-                        write_symb($xml, '2', $instruction, $str[2]);
-                        write_symb($xml, '3', $instruction, $str[3]);
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
-
-                # conversion instructions
-                ## INT2CHAR
-                case (preg_match('/^INT2CHAR/', $file[$i]) ? true : false) :
-
-                    if (empty($str[3])) {
-                        $instruction->setAttribute('opcode', 'INT2CHAR');
-                        write_var($xml, '1', $instruction, $str[1]);
-                        write_symb($xml, '2', $instruction, $str[2]);
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
-                ## STRI2INT
-                case (preg_match('/^STRI2INT/', $file[$i]) ? true : false) :
-
-                    if (empty($str[4])) {
-                        $instruction->setAttribute('opcode', 'STRI2INT');
-                        write_var($xml, '1', $instruction, $str[1]);
-                        write_symb($xml, '2', $instruction, $str[2]);
-                        write_symb($xml, '3', $instruction, $str[3]);
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
-                # input/output instructions
+                # <instruction> <var> <type>
                 ## READ
-                case (preg_match('/^READ/', $file[$i]) ? true : false) :
+                case 'READ':
 
-                    if (empty($str[3])) {
-                        $instruction->setAttribute('opcode', 'READ');
+                    # checking the number of arguments
+                    if ((empty($str[3])) && (!empty($str[2]))) {
+                        $instruction->setAttribute('opcode', $str[0]);
                         write_var($xml, '1', $instruction, $str[1]);
                         write_type($xml, '2', $instruction, $str[2]);
                     } else {
@@ -539,114 +338,65 @@
                         exit(23);
                     }
                     break;
-                
-                ## WRITE
-                case (preg_match('/^WRITE/', $file[$i]) ? true : false) :
 
-                    if (empty($str[2])) {
-                        $instruction->setAttribute('opcode', 'WRITE');
-                        write_symb($xml, '1', $instruction, $str[1]);
+                    
+                # <instruction> <var> <symb>
+                ## MOVE, NOT, INT2CHAR, STRLEN, TYPE
+                case 'MOVE':
+                case 'NOT':    
+                case 'INT2CHAR':
+                case 'STRLEN':
+                case 'TYPE':
+
+                    # checking the number of arguments
+                    if ((empty($str[3])) && (!empty($str[2]))) {
+                        $instruction->setAttribute('opcode', $str[0]);
+                        write_var($xml, '1', $instruction, $str[1]);
+                        write_symb($xml, '2', $instruction, $str[2]);
                     } else {
                         fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
                         exit(23);
-                    }
+                    }             
                     break;
-                
 
-                # string instructions
-                ## CONCAT
-                case (preg_match('/^CONCAT/', $file[$i]) ? true : false) :
 
-                    if (empty($str[4])) {
-                        $instruction->setAttribute('opcode', 'CONCAT');
+                # instruction <var> <symb> <symb>    
+                ## ADD, SUB, MUL, IDIV, LT, GT, EQ, AND, OR, STRI2INT, CONCAT, GETCHAR, SETCHAR
+                case 'ADD':
+                case 'SUB':
+                case 'MUL':
+                case 'IDIV':
+                case 'LT':
+                case 'GT':
+                case 'EQ':
+                case 'AND':                
+                case 'OR':
+                case 'NOT':
+                case 'STRI2INT':
+                case 'CONCAT':
+                case 'GETCHAR':
+                case 'SETCHAR':
+
+                    # checking the number of arguments
+                    if ((empty($str[4])) && (!empty($str[3]))) {   
+                        $instruction->setAttribute('opcode', $str[0]);
                         write_var($xml, '1', $instruction, $str[1]);
                         write_symb($xml, '2', $instruction, $str[2]);
                         write_symb($xml, '3', $instruction, $str[3]);
                     } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
+                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");                  
                         exit(23);
                     }
                     break;
                 
-                ## STRLEN
-                case (preg_match('/^STRLEN/', $file[$i]) ? true : false) :
-                    if (empty($str[3])) {
-                        $instruction->setAttribute('opcode', 'STRLEN');
-                        write_var($xml, '1', $instruction, $str[1]);
-                        write_symb($xml, '2', $instruction, $str[2]);
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
-                ## GETCHAR
-                case (preg_match('/^GETCHAR/', $file[$i]) ? true : false) :
-                    if (empty($str[4])) {
-                        $instruction->setAttribute('opcode', 'GETCHAR');
-                        write_var($xml, '1', $instruction, $str[1]);
-                        write_symb($xml, '2', $instruction, $str[2]);
-                        write_symb($xml, '3', $instruction, $str[3]);
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
-                ## SETCHAR
-                case (preg_match('/^SETCHAR/', $file[$i]) ? true : false) :
-                    $instruction->setAttribute('opcode', 'SETCHAR');
-                    if (empty($str[4])) {
-                        write_var($xml, '1', $instruction, $str[1]);
-                        write_symb($xml, '2', $instruction, $str[2]);
-                        write_symb($xml, '3', $instruction, $str[3]);
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
+                # <instruction> <label> <symb> <symb>
+                ## JUMPIFEQ, JUMPIFNEQ
+                case 'JUMPIFEQ':
+                case 'JUMPIFNEQ':
 
-                # dynamic_type instruction
-                ## TYPE
-                case (preg_match('/^TYPE/', $file[$i]) ? true : false) :
-                    if (empty($str[3])) {
-                        $instruction->setAttribute('opcode', 'TYPE');
-                        write_var($xml, '1', $instruction, $str[1]);
-                        write_symb($xml, '2', $instruction, $str[2]);
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
-                # control/jump instructions
-                ## LABEL
-                case (preg_match('/^LABEL/', $file[$i]) ? true : false) :
-                    if (empty($str[2])) {
-                        $instruction->setAttribute('opcode', 'LABEL');
-                        write_label($xml, '1', $instruction, $str[1]);
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
-                ## JUMP
-                case (preg_match('/^JUMP/', $file[$i]) ? true : false) :
-                    if (empty($str[2])) {
-                        $instruction->setAttribute('opcode', 'JUMP');
-                        write_label($xml, '1', $instruction, $str[1]);
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
-                ## JUMPIFEQ
-                case (preg_match('/^JUMPIFEQ/', $file[$i]) ? true : false) :
-                    if (empty($str[4])) {
-                        $instruction->setAttribute('opcode', 'JUMPIFEQ');
+                    # checking the number of arguments
+                    if ((empty($str[4])) && (!empty($str[3]))) {
+                        $instruction->setAttribute('opcode', $str[0]);
                         write_label($xml, '1', $instruction, $str[1]);
                         write_symb($xml, '2', $instruction, $str[2]);
                         write_symb($xml, '3', $instruction, $str[3]);
@@ -656,53 +406,7 @@
                     }
                     break;
                 
-                ## JUMPIFNEQ
-                case (preg_match('/^JUMPIFNEQ/', $file[$i]) ? true : false) :
-                    if (empty($str[4])) {
-                        $instruction->setAttribute('opcode', 'JUMPIFNEQ');
-                        write_label($xml, '1', $instruction, $str[1]);
-                        write_symb($xml, '2', $instruction, $str[2]);
-                        write_symb($xml, '3', $instruction, $str[3]);
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
-                ## EXIT
-                case (preg_match('/^EXIT/', $file[$i]) ? true : false) :
-                    if (empty($str[2])) {
-                        $instruction->setAttribute('opcode', 'EXIT');
-                        write_symb($xml, '1', $instruction, $str[1]);
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
-
-                # debug instructions
-                ## DPRINT
-                case (preg_match('/^DPRINT/', $file[$i]) ? true : false) :
-                    if (empty($str[2])) {
-                        $instruction->setAttribute('opcode', 'DPRINT');
-                        write_symb($xml, '1', $instruction, $str[1]);
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-                
-                ## BREAK
-                case (preg_match('/^BREAK/', $file[$i]) ? true : false) :
-                    if (empty($str[1])) {
-                        $instruction->setAttribute('opcode', 'BREAK');
-                    } else {
-                        fwrite(STDERR, "[parse.php]: ERROR (23) - Wrong number of instruction arguments\n");
-                        exit(23);
-                    }
-                    break;
-
+                # <error>
                 default:
                     fprintf(STDERR, "[parse.php]: ERROR (23) Unknown instruction");
                     exit(22);
