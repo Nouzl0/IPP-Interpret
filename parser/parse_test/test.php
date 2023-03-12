@@ -41,7 +41,7 @@ class Tester {
     $src = "./tests/$name.src";
     $out = "./tests/$name.out";
 
-    $cmd = "{$this->php} parse.php < $src > tmp/out.xml 2>/dev/null";
+    $cmd = "{$this->php} parse.php < $src > tmp/out.xml ";
     $output = null;
     $rc = null;
     exec($cmd, $output, $rc);

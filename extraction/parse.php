@@ -5,7 +5,7 @@
     # - - - - - - - - #
 
     ini_set('display_errors', 'stderr');
-    error_reporting(E_ERROR | E_PARSE);
+    #error_reporting(E_ERROR | E_PARSE);
 
 
     # - - - - - - - - - - - - - - #
@@ -145,7 +145,7 @@
             print("Input: input is a .IPPcode23 file -> <file>\n");
             print("Output: output is a XML file -> <file>.xml, this file is used by the interpret\n");
             print("- - - - - - - - -\nUsage: php parse.php <file>\n");
-            exit(10);
+            exit(0);
         } else {
             fwrite(STDERR, "[parse.php]: ERROR (10) - too many arguments\n");
             exit(10);
@@ -705,7 +705,7 @@
 
                 default:
                     fprintf(STDERR, "[parse.php]: ERROR (23) Unknown instruction");
-                    exit(23);
+                    exit(22);
             }
 
             # adding the instruction to the root element
