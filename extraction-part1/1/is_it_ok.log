@@ -1,9 +1,10 @@
 Archive:  xnosal01.zip
   inflating: parse.php               
- extracting: readme1.md              
+  inflating: readme1.md              
  - [ parse.php ] -
-Info: parse.php is parser for IPPcode23 used by interpret.py
+Info: parse.php is parser for Interpret-IPPcode23 used by interpret.py
 Input: input is a .IPPcode23 file -> <file>
 Output: output is a XML file -> <file>.xml, this file is used by the interpret
-- - - - - - - - -
+
 Usage: php parse.php <file>
+Example: php parse.php < parse.IPPcode23
