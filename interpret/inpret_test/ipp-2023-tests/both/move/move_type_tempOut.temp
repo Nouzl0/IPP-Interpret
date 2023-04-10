@@ -1,0 +1,73 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  MOVE
+	 var  -  GF@a
+	 int  -  5
+	 None  -  None 
+
+3  -  TYPE
+	 var  -  GF@a
+	 var  -  GF@a
+	 None  -  None 
+
+54  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+5  -  MOVE
+	 var  -  GF@a
+	 string  -  abc
+	 None  -  None 
+
+6  -  TYPE
+	 var  -  GF@a
+	 var  -  GF@a
+	 None  -  None 
+
+abc7  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+8  -  MOVE
+	 var  -  GF@a
+	 bool  -  false
+	 None  -  None 
+
+9  -  TYPE
+	 var  -  GF@a
+	 var  -  GF@a
+	 None  -  None 
+
+false10  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+11  -  MOVE
+	 var  -  GF@a
+	 nil  -  nil
+	 None  -  None 
+
+12  -  TYPE
+	 var  -  GF@a
+	 var  -  GF@a
+	 None  -  None 
+
+nil13  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{'a': 'nil'}

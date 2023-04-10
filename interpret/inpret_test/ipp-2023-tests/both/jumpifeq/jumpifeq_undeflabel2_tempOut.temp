@@ -1,0 +1,13 @@
+1  -  JUMPIFEQ
+	 label  -  aaa
+	 int  -  6
+	 int  -  5 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{}

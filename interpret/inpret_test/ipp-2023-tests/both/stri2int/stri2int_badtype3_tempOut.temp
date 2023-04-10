@@ -1,0 +1,18 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  STRI2INT
+	 var  -  GF@a
+	 string  -  abc
+	 nil  -  nil 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{'a': None}

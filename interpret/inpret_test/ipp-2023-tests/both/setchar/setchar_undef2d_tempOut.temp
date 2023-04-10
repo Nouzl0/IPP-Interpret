@@ -1,0 +1,28 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  MOVE
+	 var  -  GF@a
+	 string  -  abcdefg
+	 None  -  None 
+
+3  -  CREATEFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+4  -  SETCHAR
+	 var  -  GF@a
+	 var  -  TF@undefined
+	 string  -  X 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{'a': 'abcdefg'}

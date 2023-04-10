@@ -1,0 +1,23 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  STRI2INT
+	 var  -  GF@a
+	 string  -  abcd
+	 int  -  2 
+
+None3  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{'a': None}

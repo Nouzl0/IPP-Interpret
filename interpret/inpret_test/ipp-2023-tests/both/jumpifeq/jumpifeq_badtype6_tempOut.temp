@@ -1,0 +1,23 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  LABEL
+	 label  -  aaa
+	 None  -  None
+	 None  -  None 
+
+3  -  JUMPIFEQ
+	 label  -  aaa
+	 bool  -  true
+	 string  -  false 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{'a': None}

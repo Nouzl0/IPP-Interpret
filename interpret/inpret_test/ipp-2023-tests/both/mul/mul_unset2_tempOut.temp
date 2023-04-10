@@ -1,0 +1,23 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  DEFVAR
+	 var  -  GF@b
+	 None  -  None
+	 None  -  None 
+
+3  -  MUL
+	 var  -  GF@a
+	 var  -  GF@b
+	 int  -  2 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{'a': None, 'b': None}

@@ -1,0 +1,23 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  TYPE
+	 var  -  GF@a
+	 int  -  150
+	 None  -  None 
+
+None3  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{'a': None}

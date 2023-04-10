@@ -1,0 +1,23 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  MOVE
+	 var  -  GF@a
+	 bool  -  false
+	 None  -  None 
+
+3  -  EXIT
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{'a': 'false'}

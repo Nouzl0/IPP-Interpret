@@ -1,0 +1,13 @@
+1  -  DEFVAR
+	 var  -  TF@aa
+	 None  -  None
+	 None  -  None 
+
+LF:
+{}
+
+TF:
+{'aa': None}
+
+GF:
+{}

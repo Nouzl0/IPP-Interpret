@@ -1,0 +1,18 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  EQ
+	 var  -  GF@a
+	 int  -  40
+	 bool  -  true 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{'a': None}

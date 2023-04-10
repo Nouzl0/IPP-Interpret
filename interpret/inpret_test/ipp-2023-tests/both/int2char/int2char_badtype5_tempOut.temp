@@ -1,0 +1,28 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  DEFVAR
+	 var  -  GF@b
+	 None  -  None
+	 None  -  None 
+
+3  -  MOVE
+	 var  -  GF@b
+	 bool  -  false
+	 None  -  None 
+
+4  -  INT2CHAR
+	 var  -  GF@a
+	 var  -  GF@b
+	 None  -  None 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{'a': None, 'b': 'false'}

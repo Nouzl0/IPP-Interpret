@@ -1,0 +1,18 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  GETCHAR
+	 var  -  GF@a
+	 string  -  abc
+	 var  -  LF@undefined 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{'a': None}

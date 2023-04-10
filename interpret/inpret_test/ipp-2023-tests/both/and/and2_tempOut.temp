@@ -1,0 +1,98 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  DEFVAR
+	 var  -  GF@b
+	 None  -  None
+	 None  -  None 
+
+3  -  MOVE
+	 var  -  GF@a
+	 bool  -  false
+	 None  -  None 
+
+4  -  MOVE
+	 var  -  GF@b
+	 bool  -  false
+	 None  -  None 
+
+5  -  AND
+	 var  -  GF@a
+	 var  -  GF@a
+	 var  -  GF@b 
+
+false6  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+7  -  MOVE
+	 var  -  GF@a
+	 bool  -  false
+	 None  -  None 
+
+8  -  MOVE
+	 var  -  GF@b
+	 bool  -  true
+	 None  -  None 
+
+9  -  AND
+	 var  -  GF@a
+	 var  -  GF@a
+	 var  -  GF@b 
+
+false10  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+11  -  MOVE
+	 var  -  GF@a
+	 bool  -  true
+	 None  -  None 
+
+12  -  MOVE
+	 var  -  GF@b
+	 bool  -  false
+	 None  -  None 
+
+13  -  AND
+	 var  -  GF@a
+	 var  -  GF@a
+	 var  -  GF@b 
+
+true14  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+15  -  MOVE
+	 var  -  GF@a
+	 bool  -  true
+	 None  -  None 
+
+16  -  MOVE
+	 var  -  GF@b
+	 bool  -  true
+	 None  -  None 
+
+17  -  AND
+	 var  -  GF@a
+	 var  -  GF@a
+	 var  -  GF@b 
+
+true18  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{'a': 'true', 'b': 'true'}

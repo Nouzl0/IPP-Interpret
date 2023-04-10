@@ -1,0 +1,23 @@
+1  -  CREATEFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+2  -  PUSHFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+3  -  STRLEN
+	 var  -  LF@a
+	 string  -  abc
+	 None  -  None 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{}

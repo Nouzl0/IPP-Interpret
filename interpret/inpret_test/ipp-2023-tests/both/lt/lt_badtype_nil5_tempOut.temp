@@ -1,0 +1,18 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  LT
+	 var  -  GF@a
+	 string  -  asdf
+	 nil  -  nil 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{'a': None}

@@ -1,0 +1,153 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  LT
+	 var  -  GF@a
+	 int  -  40
+	 int  -  2 
+
+None3  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+4  -  LT
+	 var  -  GF@a
+	 int  -  40
+	 int  -  40 
+
+None5  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+6  -  LT
+	 var  -  GF@a
+	 int  -  40
+	 int  -  150 
+
+None7  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+8  -  LT
+	 var  -  GF@a
+	 int  -  -10
+	 int  -  -40 
+
+None9  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+10  -  LT
+	 var  -  GF@a
+	 string  -  abcd
+	 string  -  None 
+
+None11  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+12  -  LT
+	 var  -  GF@a
+	 string  -  abcd
+	 string  -  bcde 
+
+None13  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+14  -  LT
+	 var  -  GF@a
+	 string  -  bcde
+	 string  -  abcd 
+
+None15  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+16  -  LT
+	 var  -  GF@a
+	 string  -  abcd
+	 string  -  abcd 
+
+None17  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+18  -  LT
+	 var  -  GF@a
+	 string  -  \065
+	 string  -  A 
+
+None19  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+20  -  LT
+	 var  -  GF@a
+	 string  -  A
+	 string  -  \065 
+
+None21  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+22  -  LT
+	 var  -  GF@a
+	 bool  -  false
+	 bool  -  false 
+
+None23  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+24  -  LT
+	 var  -  GF@a
+	 bool  -  false
+	 bool  -  true 
+
+None25  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+26  -  LT
+	 var  -  GF@a
+	 bool  -  true
+	 bool  -  false 
+
+None27  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+28  -  LT
+	 var  -  GF@a
+	 bool  -  true
+	 bool  -  true 
+
+None29  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{'a': None}

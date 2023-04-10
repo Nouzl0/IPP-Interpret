@@ -1,0 +1,88 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  READ
+	 var  -  GF@a
+	 type  -  int
+	 None  -  None 
+
+None3  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+4  -  TYPE
+	 var  -  GF@a
+	 var  -  GF@a
+	 None  -  None 
+
+None5  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+6  -  CREATEFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+7  -  DEFVAR
+	 var  -  TF@a
+	 None  -  None
+	 None  -  None 
+
+8  -  READ
+	 var  -  TF@a
+	 type  -  int
+	 None  -  None 
+
+None9  -  WRITE
+	 var  -  TF@a
+	 None  -  None
+	 None  -  None 
+
+10  -  TYPE
+	 var  -  TF@a
+	 var  -  TF@a
+	 None  -  None 
+
+None11  -  WRITE
+	 var  -  TF@a
+	 None  -  None
+	 None  -  None 
+
+12  -  PUSHFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+13  -  READ
+	 var  -  LF@a
+	 type  -  int
+	 None  -  None 
+
+None14  -  WRITE
+	 var  -  LF@a
+	 None  -  None
+	 None  -  None 
+
+15  -  TYPE
+	 var  -  LF@a
+	 var  -  LF@a
+	 None  -  None 
+
+None16  -  WRITE
+	 var  -  LF@a
+	 None  -  None
+	 None  -  None 
+
+LF:
+{}
+
+TF:
+{'a': None}
+
+GF:
+{'a': None}

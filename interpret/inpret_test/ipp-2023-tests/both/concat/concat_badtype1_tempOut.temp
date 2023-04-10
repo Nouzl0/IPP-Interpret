@@ -1,0 +1,18 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  CONCAT
+	 var  -  GF@a
+	 string  -  abcd
+	 int  -  2 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{'a': None}

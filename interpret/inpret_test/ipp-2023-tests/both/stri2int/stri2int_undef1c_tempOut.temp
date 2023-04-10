@@ -1,0 +1,13 @@
+1  -  STRI2INT
+	 var  -  LF@undefined
+	 string  -  abc
+	 int  -  1 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{}

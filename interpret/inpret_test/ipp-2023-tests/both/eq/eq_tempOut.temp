@@ -1,0 +1,213 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  EQ
+	 var  -  GF@a
+	 int  -  40
+	 int  -  2 
+
+None3  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+4  -  EQ
+	 var  -  GF@a
+	 int  -  40
+	 int  -  40 
+
+None5  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+6  -  EQ
+	 var  -  GF@a
+	 int  -  40
+	 nil  -  nil 
+
+None7  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+8  -  EQ
+	 var  -  GF@a
+	 nil  -  nil
+	 int  -  40 
+
+None9  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+10  -  EQ
+	 var  -  GF@a
+	 int  -  0
+	 nil  -  nil 
+
+None11  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+12  -  EQ
+	 var  -  GF@a
+	 string  -  abcd
+	 string  -  None 
+
+None13  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+14  -  EQ
+	 var  -  GF@a
+	 string  -  abcd
+	 string  -  ab 
+
+None15  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+16  -  EQ
+	 var  -  GF@a
+	 string  -  abcd
+	 string  -  abcd 
+
+None17  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+18  -  EQ
+	 var  -  GF@a
+	 string  -  \065B
+	 string  -  A\066 
+
+None19  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+20  -  EQ
+	 var  -  GF@a
+	 string  -  abc
+	 nil  -  nil 
+
+None21  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+22  -  EQ
+	 var  -  GF@a
+	 nil  -  nil
+	 string  -  abc 
+
+None23  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+24  -  EQ
+	 var  -  GF@a
+	 bool  -  false
+	 bool  -  false 
+
+None25  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+26  -  EQ
+	 var  -  GF@a
+	 bool  -  false
+	 bool  -  true 
+
+None27  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+28  -  EQ
+	 var  -  GF@a
+	 bool  -  true
+	 bool  -  false 
+
+None29  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+30  -  EQ
+	 var  -  GF@a
+	 bool  -  true
+	 bool  -  true 
+
+None31  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+32  -  EQ
+	 var  -  GF@a
+	 bool  -  true
+	 nil  -  nil 
+
+None33  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+34  -  EQ
+	 var  -  GF@a
+	 bool  -  false
+	 nil  -  nil 
+
+None35  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+36  -  EQ
+	 var  -  GF@a
+	 nil  -  nil
+	 bool  -  true 
+
+None37  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+38  -  EQ
+	 var  -  GF@a
+	 nil  -  nil
+	 bool  -  false 
+
+None39  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+40  -  EQ
+	 var  -  GF@a
+	 nil  -  nil
+	 nil  -  nil 
+
+None41  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{'a': None}

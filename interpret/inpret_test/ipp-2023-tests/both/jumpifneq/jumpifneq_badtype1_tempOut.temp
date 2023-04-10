@@ -1,0 +1,23 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  LABEL
+	 label  -  aaa
+	 None  -  None
+	 None  -  None 
+
+3  -  JUMPIFNEQ
+	 label  -  aaa
+	 int  -  40
+	 string  -  2 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{'a': None}

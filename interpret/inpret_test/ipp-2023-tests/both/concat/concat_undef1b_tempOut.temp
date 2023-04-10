@@ -1,0 +1,13 @@
+1  -  CONCAT
+	 var  -  TF@undefined
+	 string  -  foo
+	 string  -  bar 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{}

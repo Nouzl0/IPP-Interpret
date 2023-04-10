@@ -1,0 +1,103 @@
+1  -  CREATEFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+2  -  PUSHFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+3  -  DEFVAR
+	 var  -  GF@var
+	 None  -  None
+	 None  -  None 
+
+4  -  DEFVAR
+	 var  -  LF@var
+	 None  -  None
+	 None  -  None 
+
+5  -  MOVE
+	 var  -  LF@var
+	 string  -  hah
+	 None  -  None 
+
+6  -  MOVE
+	 var  -  GF@var
+	 int  -  1
+	 None  -  None 
+
+7  -  LABEL
+	 label  -  cycle
+	 None  -  None
+	 None  -  None 
+
+8  -  CALL
+	 label  -  main
+	 None  -  None
+	 None  -  None 
+
+19  -  WRITE
+	 var  -  GF@var
+	 None  -  None
+	 None  -  None 
+
+10  -  ADD
+	 var  -  GF@var
+	 var  -  GF@var
+	 int  -  1 
+
+111  -  WRITE
+	 var  -  GF@var
+	 None  -  None
+	 None  -  None 
+
+12  -  JUMPIFNEQ
+	 label  -  cycle
+	 var  -  GF@var
+	 int  -  10 
+
+hah13  -  WRITE
+	 var  -  LF@var
+	 None  -  None
+	 None  -  None 
+
+14  -  EXIT
+	 int  -  0
+	 None  -  None
+	 None  -  None 
+
+15  -  LABEL
+	 label  -  main
+	 None  -  None
+	 None  -  None 
+
+16  -  CREATEFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+17  -  PUSHFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+18  -  POPFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+19  -  RETURN
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+LF:
+{'var': 'hah'}
+
+TF:
+{}
+
+GF:
+{'var': '1'}

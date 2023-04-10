@@ -1,0 +1,28 @@
+1  -  CREATEFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+2  -  PUSHFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+3  -  LABEL
+	 label  -  aaa
+	 None  -  None
+	 None  -  None 
+
+4  -  JUMPIFNEQ
+	 label  -  aaa
+	 var  -  LF@undefined
+	 int  -  2 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{}

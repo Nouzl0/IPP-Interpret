@@ -1,0 +1,63 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  NOT
+	 var  -  GF@a
+	 bool  -  true
+	 None  -  None 
+
+None3  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+4  -  NOT
+	 var  -  GF@a
+	 bool  -  false
+	 None  -  None 
+
+None5  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+6  -  MOVE
+	 var  -  GF@a
+	 bool  -  true
+	 None  -  None 
+
+7  -  NOT
+	 var  -  GF@a
+	 var  -  GF@a
+	 None  -  None 
+
+true8  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+9  -  MOVE
+	 var  -  GF@a
+	 bool  -  false
+	 None  -  None 
+
+10  -  NOT
+	 var  -  GF@a
+	 var  -  GF@a
+	 None  -  None 
+
+false11  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{'a': 'false'}

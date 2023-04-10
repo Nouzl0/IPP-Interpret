@@ -1,0 +1,23 @@
+1  -  CREATEFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+2  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+3  -  NOT
+	 var  -  GF@a
+	 var  -  TF@undef
+	 None  -  None 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{'a': None}

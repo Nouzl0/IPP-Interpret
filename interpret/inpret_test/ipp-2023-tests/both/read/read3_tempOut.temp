@@ -1,0 +1,73 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  READ
+	 var  -  GF@a
+	 type  -  string
+	 None  -  None 
+
+None3  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+4  -  TYPE
+	 var  -  GF@a
+	 var  -  GF@a
+	 None  -  None 
+
+None5  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+6  -  READ
+	 var  -  GF@a
+	 type  -  string
+	 None  -  None 
+
+None7  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+8  -  TYPE
+	 var  -  GF@a
+	 var  -  GF@a
+	 None  -  None 
+
+None9  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+10  -  READ
+	 var  -  GF@a
+	 type  -  string
+	 None  -  None 
+
+None11  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+12  -  TYPE
+	 var  -  GF@a
+	 var  -  GF@a
+	 None  -  None 
+
+None13  -  WRITE
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{'a': None}

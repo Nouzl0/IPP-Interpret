@@ -1,0 +1,28 @@
+1  -  CREATEFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+2  -  DEFVAR
+	 var  -  TF@aa
+	 None  -  None
+	 None  -  None 
+
+3  -  PUSHFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+4  -  DEFVAR
+	 var  -  LF@aa
+	 None  -  None
+	 None  -  None 
+
+LF:
+{'aa': None}
+
+TF:
+{'aa': None}
+
+GF:
+{}

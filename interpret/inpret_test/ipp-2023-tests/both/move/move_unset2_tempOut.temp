@@ -1,0 +1,28 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  CREATEFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+3  -  DEFVAR
+	 var  -  TF@b
+	 None  -  None
+	 None  -  None 
+
+4  -  MOVE
+	 var  -  GF@a
+	 var  -  TF@b
+	 None  -  None 
+
+LF:
+{}
+
+TF:
+{'b': None}
+
+GF:
+{'a': 'TF@b'}

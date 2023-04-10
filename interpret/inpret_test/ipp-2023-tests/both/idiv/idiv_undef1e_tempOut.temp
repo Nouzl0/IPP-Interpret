@@ -1,0 +1,23 @@
+1  -  CREATEFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+2  -  PUSHFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+3  -  IDIV
+	 var  -  LF@undefined
+	 int  -  40
+	 int  -  2 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{}

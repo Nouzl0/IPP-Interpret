@@ -1,0 +1,23 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  CREATEFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+3  -  OR
+	 var  -  GF@a
+	 var  -  TF@undefined
+	 bool  -  false 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{'a': None}

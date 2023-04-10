@@ -1,0 +1,33 @@
+1  -  DEFVAR
+	 var  -  GF@a
+	 None  -  None
+	 None  -  None 
+
+2  -  CREATEFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+3  -  PUSHFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+4  -  DEFVAR
+	 var  -  LF@b
+	 None  -  None
+	 None  -  None 
+
+5  -  STRLEN
+	 var  -  GF@a
+	 var  -  LF@b
+	 None  -  None 
+
+LF:
+{'b': None}
+
+TF:
+{}
+
+GF:
+{'a': None}

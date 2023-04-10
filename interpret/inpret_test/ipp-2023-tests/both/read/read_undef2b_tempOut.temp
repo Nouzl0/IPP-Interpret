@@ -1,0 +1,18 @@
+1  -  CREATEFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+2  -  READ
+	 var  -  TF@a
+	 type  -  bool
+	 None  -  None 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{}

@@ -1,0 +1,28 @@
+1  -  PUSHS
+	 string  -  ahoj
+	 None  -  None
+	 None  -  None 
+
+2  -  CREATEFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+3  -  PUSHFRAME
+	 None  -  None
+	 None  -  None
+	 None  -  None 
+
+4  -  POPS
+	 var  -  LF@undef
+	 None  -  None
+	 None  -  None 
+
+LF:
+{}
+
+TF:
+{}
+
+GF:
+{}
