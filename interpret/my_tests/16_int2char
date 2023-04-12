@@ -1,0 +1,36 @@
+.IPPcode23
+
+# init variables
+DEFVAR GF@return
+DEFVAR GF@int
+
+# write symb 2
+MOVE GF@int int@50
+INT2CHAR GF@return GF@int       # = 2
+WRITE GF@return
+WRITE string@\010
+
+# write symb _
+INT2CHAR GF@return int@95        # = _
+WRITE GF@return
+WRITE string@\010
+
+# write symb A
+INT2CHAR GF@return int@65       # =
+WRITE GF@return
+WRITE string@\010
+
+# the last UTF-8 char
+INT2CHAR GF@return int@1114111  # = 􏿿
+WRITE GF@return
+WRITE string@\010
+
+# the laughing out loud emoji
+INT2CHAR GF@return int@128518   # = 😆
+WRITE GF@return
+WRITE string@\010
+
+# error - not a UTF-8 char
+INT2CHAR GF@return int@1114112  # = error
+WRITE GF@return
+WRITE string@\010

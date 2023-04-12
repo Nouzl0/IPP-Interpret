@@ -1,0 +1,81 @@
+.IPPcode23
+
+# init variables
+DEFVAR GF@string_1
+CREATEFRAME
+PUSHFRAME
+DEFVAR LF@string_2
+DEFVAR LF@small_int
+DEFVAR LF@big_int
+DEFVAR LF@bool_true
+DEFVAR LF@bool_false
+DEFVAR LF@nil
+
+# move variables
+MOVE GF@string_1 string@řetězec\032s\032lomítkem\032\092\032a\010novým\035řádkem
+MOVE LF@string_2 string@
+MOVE LF@small_int int@-2147483648
+MOVE LF@big_int int@2147483647
+MOVE LF@bool_true bool@true
+MOVE LF@bool_false bool@false
+MOVE LF@nil nil@nil
+
+# tests
+# - WRITE <string>
+WRITE string@<string_tests>\010
+WRITE string@řetězec\032s\032lomítkem\032\092\032a\010novým\035řádkem   # = "řetězec s lomítkem \ a\nnovým#řádkem"
+WRITE string@\010
+
+WRITE GF@string_1                 # = "řetězec s lomítkem \ a\nnovým#řádkem"
+WRITE string@\010
+
+WRITE string@                     # = ""
+WRITE string@\010       
+
+WRITE LF@string_2                 # = ""
+WRITE string@\010
+WRITE string@\010
+
+
+# - WRITE <int>
+WRITE string@<int_tests>\010
+WRITE int@0                     # = 0
+WRITE string@\010
+
+WRITE int@-2147483648           # = -2147483648 
+WRITE string@\010
+
+WRITE LF@small_int              # = -2147483648
+WRITE string@\010
+
+WRITE int@2147483647            # = 2147483647
+WRITE string@\010
+
+WRITE LF@big_int                # = 2147483647
+WRITE string@\010
+WRITE string@\010
+
+
+# - WRITE <bool> 
+WRITE string@<bool_tests>\010               
+WRITE bool@true                 # = true
+WRITE string@\010
+
+WRITE LF@bool_true              # = true
+WRITE string@\010
+
+WRITE bool@false                # = false
+WRITE string@\010
+
+WRITE LF@bool_false             # = false
+WRITE string@\010
+WRITE string@\010
+
+
+# - WRITE <nil>
+WRITE string@<nil_tests>\010                 
+WRITE nil@nil                  # = ""
+WRITE string@\010
+
+WRITE LF@nil                   # = ""
+WRITE string@\010

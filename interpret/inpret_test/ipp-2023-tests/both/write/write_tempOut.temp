@@ -1,15 +1,1 @@
-1  -  DEFVAR
-	 var  -  GF@a
-	 None  -  None
-	 None  -  None 
-
-2  -  MOVE
-	 var  -  GF@a
-	 string  -  abc
-	 None  -  None 
-
-abc3  -  WRITE
-	 var  -  GF@a
-	 None  -  None
-	 None  -  None 
-
+abcefg123456truefalsenil\010Hello\035World\010

@@ -1,18 +1,1 @@
-1  -  DEFVAR
-	 var  -  GF@a
-	 None  -  None
-	 None  -  None 
-
-2  -  TYPE
-	 var  -  GF@a
-	 var  -  GF@undef
-	 None  -  None 
-
-LF:
-{}
-
-TF:
-{}
-
-GF:
-{'a': None}
+Key not found -  undef

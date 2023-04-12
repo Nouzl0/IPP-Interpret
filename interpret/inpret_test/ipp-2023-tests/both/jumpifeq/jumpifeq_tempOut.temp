@@ -1,10 +1,1 @@
-1  -  DEFVAR
-	 var  -  GF@a
-	 None  -  None
-	 None  -  None 
-
-2  -  JUMPIFEQ
-	 label  -  error
-	 int  -  40
-	 int  -  2 
-
+11111111111111111111error

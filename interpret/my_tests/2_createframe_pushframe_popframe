@@ -1,0 +1,108 @@
+.IPPcode23
+
+# global variable
+DEFVAR GF@var 
+MOVE GF@var int@1
+
+# frame test 1
+CREATEFRAME
+CREATEFRAME
+CREATEFRAME
+PUSHFRAME
+CREATEFRAME
+PUSHFRAME
+CREATEFRAME
+PUSHFRAME
+POPFRAME
+POPFRAME
+POPFRAME
+
+# frame test 2
+CREATEFRAME
+PUSHFRAME
+POPFRAME
+PUSHFRAME
+POPFRAME
+PUSHFRAME
+POPFRAME
+PUSHFRAME
+POPFRAME
+
+# gf frame test
+WRITE GF@var            # = 1
+WRITE string@\010
+
+# tf frame test
+CREATEFRAME
+DEFVAR TF@var
+MOVE TF@var int@2       
+WRITE TF@var            # = 2
+WRITE string@\010
+
+# tf->lf push frame test
+PUSHFRAME
+WRITE LF@var            # = 2
+WRITE string@\010
+
+# lf change var
+MOVE LF@var int@3
+WRITE LF@var            # = 3
+WRITE string@\010
+
+# lf -> tf pop frame test
+POPFRAME
+WRITE TF@var            # = 3
+WRITE string@\010
+
+# triple frame test with variable
+PUSHFRAME
+CREATEFRAME
+DEFVAR TF@var
+MOVE TF@var int@4
+PUSHFRAME
+CREATEFRAME
+PUSHFRAME
+
+# layers [first -> is empty], [second -> var = 4], [third -> var = 3]
+# print second layer
+POPFRAME
+WRITE LF@var            # = 4
+WRITE string@\010
+POPFRAME
+WRITE TF@var            # = 4
+WRITE string@\010
+
+# print third layer
+WRITE LF@var            # = 3
+WRITE string@\010
+POPFRAME
+WRITE TF@var            # = 3
+WRITE string@\010
+
+# global frame, overflow test
+DEFVAR GF@var1
+DEFVAR GF@var2
+DEFVAR GF@var3
+DEFVAR GF@var4
+DEFVAR GF@var5
+DEFVAR GF@var6
+DEFVAR GF@var7
+DEFVAR GF@var8
+DEFVAR GF@var9
+DEFVAR GF@var10
+DEFVAR GF@var11
+DEFVAR GF@var12
+DEFVAR GF@var13
+DEFVAR GF@var14
+DEFVAR GF@var15
+DEFVAR GF@var16
+DEFVAR GF@var17
+DEFVAR GF@var18
+DEFVAR GF@var19
+DEFVAR GF@var20
+MOVE GF@var17 int@17
+WRITE GF@var17          # = 17
+WRITE string@\010
+
+# error test
+WRITE LF@var            # = error
