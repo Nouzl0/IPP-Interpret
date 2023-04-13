@@ -211,7 +211,7 @@ class Interpret:
             
             # [7] - uknown opcode
             else: 
-                print("Error: unknown opcode")
+                sys.stderr.write("Error: unknown opcode\n")
                 exit(53)
 
 
@@ -254,7 +254,7 @@ class ExecuteInstruction:
             # insert the variable into the symbol table
             self.frame_data.symt_insert_var(inst.arg1_text)
         else: 
-            print("Error: DEFVAR - invalid argument type")
+            sys.stderr.write("Error: DEFVAR - invalid argument type\n")
             exit(56)
 
     # MOVE
@@ -382,7 +382,7 @@ class ExecuteInstruction:
 
         # catch division by zero
         if var_data_2 == "0":
-            print("Error: IDIV - unleageal division by zero")
+            sys.stderr.write("Error: IDIV - unleageal division by zero\n")
             exit(57)
 
         else:
@@ -534,7 +534,7 @@ class ExecuteInstruction:
         try:
             char = chr(int(var_data))
         except ValueError:
-            print("Error: invalid value of type int")
+            sys.stderr.write("Error: invalid value of type int\n")
             exit(58)
 
         # update value
@@ -551,7 +551,7 @@ class ExecuteInstruction:
         if char_pos < len(var_data_1):
             char = var_data_1[char_pos]
         else:
-            print("Error: string index out of range")
+            sys.stderr.write("Error: string index out of range\n")
             exit(58)            
 
         # update value
@@ -698,14 +698,14 @@ class ExecuteInstruction:
 
         # check the string index with char_pos position
         if len(var_string) < int(var_int):
-            print("Error: string index out of range")
+            sys.stderr.write("Error: string index out of range\n")
             exit(58)
 
         # get the char
         try:
             char = var_string[int(var_int)]
         except IndexError:
-            print("Error: string index out of range")
+            sys.stderr.write("Error: string index out of range\n")
             exit(58)
 
         # update value
@@ -723,10 +723,10 @@ class ExecuteInstruction:
             var_type, var_data = self.frame_data.symt_gather_var(inst.arg1_text)
             
             if var_type != "string":
-                print("Error: invalid type of variable")
+                sys.stderr.write("Error: invalid type of variable\n")
                 exit(53) 
         else:
-            print("Error: invalid type of variable")
+            sys.stderr.write("Error: invalid type of variable\n")
             exit(53)
 
         # check the string index with char_pos position
@@ -743,12 +743,12 @@ class ExecuteInstruction:
             var_string = ""
 
         elif len(var_string) <= int(var_int):
-            print("Error: string index out of range")
+            sys.stderr.write("Error: string index out of range\n")
             exit(58)
 
         # check if var_string is not empty
         if var_string == None:
-            print("Error: invalid value of type string")
+            sys.stderr.write("Error: invalid value of type string\n")
             exit(58)
 
         # modify the var data string
@@ -848,7 +848,7 @@ class ExecuteInstruction:
 
         # check if the integer is in interval <0,49>
         if int(var_data) < 0 or int(var_data) > 49:
-            print("Error: wrong value of exit code")
+            sys.stderr.write("Error: wrong value of exit code\n")
             exit(57)
 
         # exit the program
@@ -955,7 +955,7 @@ class FrameStackProtocol:
         elif var_scope == "LF" and self.symt_lf != None:
             self.symt_lf.insert_key(var_name)
         else:
-            print("Error: symt_insert_var - nowhere to insert variable")
+            sys.stderr.write("Error: symt_insert_var - nowhere to insert variable\n")
             exit(52)
 
 
@@ -981,7 +981,7 @@ class FrameStackProtocol:
         elif var_scope == "LF" and self.symt_lf != None:
             self.symt_lf.set_var(var_name, var_value, var_type)
         else:
-            print("Error: symt_update_var - nowhere to update the variable")
+            sys.stderr.write("Error: symt_update_var - nowhere to update the variable\n")
             exit(52)   
     
 
@@ -1007,7 +1007,7 @@ class FrameStackProtocol:
         elif var_scope == "LF" and self.symt_lf != None:
             var_data, var_type = self.symt_lf.get_var(var_name)
         else:
-            print("Error: symt_gather_var - nowhere to gather the variable")
+            sys.stderr.write("Error: symt_gather_var - nowhere to gather the variable\n")
             exit(52)
 
         return var_type, var_data
@@ -1053,7 +1053,7 @@ class FrameStackProtocol:
             check_type = check_type_dict[type_option]
             arg_type, arg_text = arg_num_dict[arg_num]
         except KeyError:
-            print("Error: ExecuteInstruction - Private method symtget_arithmetic - invalid type option")
+            sys.stderr.write("Error: ExecuteInstruction - Private method symtget_arithmetic - invalid type option\n")
             exit(99)
 
 
@@ -1063,7 +1063,7 @@ class FrameStackProtocol:
             
             # check if the variable is int
             if var_type not in check_type:
-                print("Error: ", inst.opcode," - invalid second variable type")
+                sys.stderr.write("Error: - invalid second variable type\n")
                 exit(53)
 
         # get the var data from the instruction
@@ -1071,7 +1071,7 @@ class FrameStackProtocol:
             var_data = arg_text
             var_type = arg_type
         else:
-            print("Error: ", inst.opcode," - invalid second variable type")
+            sys.stderr.write("Error: - invalid second variable type\n")
             exit(53)
 
         return var_type, var_data
@@ -1114,7 +1114,7 @@ class FrameStackProtocol:
         try:
             check_type_1, check_type_2 = check_type_dict[type_option]
         except KeyError:
-            print("Error: ExecuteInstruction - Private method symtget_arithmetic - invalid type option")
+            sys.stderr.write("Error: ExecuteInstruction - Private method symtget_arithmetic - invalid type option\n")
             exit(99)
 
 
@@ -1124,7 +1124,7 @@ class FrameStackProtocol:
             
             # check if the variable is int
             if var_type_1 not in check_type_1:
-                print("Error: ", inst.opcode," - invalid second variable type")
+                sys.stderr.write("Error: - invalid second variable type\n")
                 exit(53)
 
         # get the var data from the instruction
@@ -1132,7 +1132,7 @@ class FrameStackProtocol:
             var_data_1 = inst.arg2_text
             var_type_1 = inst.arg2_type
         else:
-            print("Error: ", inst.opcode," - invalid second variable type")
+            sys.stderr.write("Error: - invalid second variable type\n")
             exit(53)
 
 
@@ -1143,18 +1143,18 @@ class FrameStackProtocol:
             # they should be the same type  
             if type_similarity == "same":
                 if var_type_2 != var_type_1:
-                    print("Error: ", inst.opcode," - invalid third variable type")
+                    sys.stderr.write("Error: - invalid third variable type\n")
                     exit(53)
         
             # they can be different types
             elif type_similarity == "different":
                 if var_type_2 not in check_type_2:
-                    print("Error: ", inst.opcode," - invalid third variable type")
+                    sys.stderr.write("Error: - invalid third variable type\n")
                     exit(53)
             
             # internal error wrong type_similarity
             else:
-                print("Error: ExecuteInstruction - Private method symtget_arithmetic - invalid type similarity")
+                sys.stderr.write("Error: ExecuteInstruction - Private method symtget_arithmetic - invalid type similarity\n")
                 exit(99)
 
 
@@ -1165,7 +1165,7 @@ class FrameStackProtocol:
                 if inst.arg3_type == var_type_1:
                     var_data_2 = inst.arg3_text
                 else:
-                    print("Error: ", inst.opcode," - invalid second variable type")
+                    sys.stderr.write("Error: - invalid second variable type\n")
                     exit(53)
             
             # they can be different types
@@ -1173,12 +1173,12 @@ class FrameStackProtocol:
                 if inst.arg3_type in check_type_2:
                     var_data_2 = inst.arg3_text
                 else:
-                    print("Error: ", inst.opcode," - invalid second variable type")
+                    sys.stderr.write("Error: - invalid second variable type\n")
                     exit(53)
             
             # internal error wrong type_similarity
             else:
-                print("Error: ExecuteInstruction - Private method symtget_arithmetic - invalid type similarity")
+                sys.stderr.write("Error: ExecuteInstruction - Private method symtget_arithmetic - invalid type similarity\n")
                 exit(99)
             
         return var_type_1, var_data_1, var_type_2, var_data_2 
@@ -1205,7 +1205,7 @@ class FrameStack:
             self.__frame_stack.append(symt_tf)
             symt_lf = symt_tf
         else:
-            print("Error: FrameStack - push_frame_to_stack - no temporary frame")
+            sys.stderr.write("Error: FrameStack - push_frame_to_stack - no temporary frame\n")
             exit(55)
 
         # returns symt_lf -> new local frame
@@ -1227,7 +1227,7 @@ class FrameStack:
         
         # stack is empty
         else:
-            print("Error: FrameStack - pop_frame_from_stack - stack is empty")
+            sys.stderr.write("Error: FrameStack - pop_frame_from_stack - stack is empty\n")
             exit(55)
 
         # returns symt_lf -> new local frame, symt_tf -> popped frame
@@ -1253,7 +1253,7 @@ class SymbolTableData:
         if key not in self.table:
             self.table[key] = (None, None)
         else:
-            print("Variable already exists - ", key)
+            sys.stderr.write("Variable already exists \n")
             exit(52)
 
     # inserts or replaces the value and the type of the key
@@ -1262,7 +1262,7 @@ class SymbolTableData:
             self.table[key] = (data, data_type)
         else:
             # raise an error or handle the case where the key is not found
-            print("Key not found", key)
+            sys.stderr.write("Key not found \n")
             exit(52)
     
     # return the value and the type of the key
@@ -1273,7 +1273,7 @@ class SymbolTableData:
             return var_data, var_value
         else:
             # raise an error or handle the case where the key is not found
-            print("Key not found - ", key)
+            sys.stderr.write("Key not found \n")
             exit(52)
     
     # clears the hash table
@@ -1332,7 +1332,7 @@ class FuncCallStack:
         if not self.is_empty():
             return self.stack.pop()
         else:
-            print("Error: FuncCallStack - pop - stack is empty")
+            sys.stderr.write("Error: FuncCallStack - pop - stack is empty\n")
             exit(56)
 
     # check if the stack is empty
@@ -1363,7 +1363,7 @@ class SymbolTableJump:
 
         # if the label is already in the table, raise an error
         if label in self.table:
-            print("Error: SymbolTableJump - add_label - label already exists")
+            sys.stderr.write("Error: SymbolTableJump - add_label - label already exists\n")
             exit(52)
 
         # add the label to the table
@@ -1375,7 +1375,7 @@ class SymbolTableJump:
 
         # if the label is not in the table, raise an error
         if label not in self.table:
-            print("Error: SymbolTableJump - get_label - label not found")
+            sys.stderr.write("Error: SymbolTableJump - get_label - label not found\n")
             exit(52)
         
         # return the label inst_order

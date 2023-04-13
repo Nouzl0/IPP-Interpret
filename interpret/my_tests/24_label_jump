@@ -1,0 +1,32 @@
+.IPPcode23
+
+# simple jump
+JUMP here
+WRITE string@Hello\032world!
+WRITE string@\010
+WRITE string@\010
+LABEL here
+
+WRITE string@one\032
+WRITE string@two\032
+WRITE string@three                  # = "one two three"
+WRITE string@\010 
+
+
+# jump on jump on jump
+JUMP one
+LABEL two
+WRITE string@two\010
+JUMP three
+LABEL one
+WRITE string@one\010
+JUMP two
+LABEL three
+WRITE string@three\010          # = "one\n", "two\n", "three\n"
+
+# error - label not defined
+JUMP nowhere
+
+# error - label already defined
+LABEL here
+

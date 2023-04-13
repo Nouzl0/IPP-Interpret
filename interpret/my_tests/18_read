@@ -1,0 +1,26 @@
+.IPPcode23
+
+# comment -> all text with # is comment
+# init variables
+DEFVAR GF@return
+
+# string
+READ GF@return string
+WRITE GF@return
+WRITE string@\010
+
+# int
+READ GF@return int
+WRITE GF@return
+WRITE string@\010
+
+# bool
+READ GF@return bool
+WRITE GF@return
+WRITE string@\010
+
+# nil
+READ GF@return nil
+WRITE GF@return
+WRITE string@\010
+

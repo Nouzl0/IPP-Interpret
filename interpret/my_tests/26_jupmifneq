@@ -1,0 +1,26 @@
+.IPPcode23
+
+CREATEFRAME
+PUSHFRAME
+
+# basic loop
+DEFVAR LF@counter1
+DEFVAR LF@counter2
+MOVE LF@counter1 int@0
+MOVE LF@counter2 int@0
+
+LABEL start
+JUMPIFNEQ end LF@counter1 LF@counter2             # "0", "1", "2", "3", "4", "5"
+    WRITE LF@counter1
+    WRITE string@\010
+
+    ADD LF@counter1 LF@counter1 int@1
+    ADD LF@counter2 LF@counter2 int@1
+
+    JUMPIFEQ skok LF@counter1 int@6
+    JUMP start
+
+    LABEL skok
+    SUB LF@counter1 LF@counter1 int@1
+    JUMP start
+LABEL end
