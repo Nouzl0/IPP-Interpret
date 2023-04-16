@@ -7,70 +7,73 @@ import xml.etree.ElementTree as ET
 # interpret class -> interpret interface
 class Interpret:
 
-    # instruction class -> for saving instruction data
-    class Instruction:
-        def __init__(self, opcode, order, arg1_type, arg1_text, arg2_type, arg2_text, arg3_type, arg3_text):
-            self.opcode = opcode
-            self.order = order
-            self.arg1_type = arg1_type
-            self.arg1_text = arg1_text
-            self.arg2_type = arg2_type
-            self.arg2_text = arg2_text
-            self.arg3_type = arg3_type
-            self.arg3_text = arg3_text
+    def __init__(self):
+
+        # intepret arguments
+        self.input_parse = InputParser()
+        self.source = sys.stdin         # default = stdin -> xml_file source
+        self.input = None               # default = None  -> read input
+        self.stati = None               # default = None  -> stati file
+        self.stati_args = None          # default = None  -> stati arguments
+
+    # public func. - reads the arguments -> interface
+    #
+    #  = 11 - can't open source file -> file not found, permission denied, ect.
+    #  = 12 - can't write to output file -> permission denied, ect.
+    def read_args(self):
+
+        # parse the arguments
+        self.source, self.input, self.stati, self.stati_args = self.input_parse.parse_arguments()
+        
+        # setup stdin as defalut for source file
+        if self.source == None:
+            self.source = sys.stdin
+
+        # open source file if possible
+        if self.source != sys.stdin:
+            try:
+                self.source = open(self.source, "r")
+            except FileNotFoundError or PermissionError:
+                sys.stderr.write(f"[interpret.py]: ERROR (11) - Can't open source file {self.source}\n")
+                sys.exit(11)
+        
+        # open input file if possible
+        if self.input != None:
+            try:
+                self.input = open(self.input, "r")
+            except FileNotFoundError or PermissionError:
+                sys.stderr.write(f"[interpret.py]: ERROR (11) - Can't open input file {self.input}\n")
+                sys.exit(11)
+
+        # set stdin for the input file
+        if self.input == None:
+            self.input = sys.stdin
+
+        # set up the stati file
+        if self.stati != None:
+            try:
+                self.stati = open(self.stati, "w")
+            except FileNotFoundError or PermissionError:
+                sys.stderr.write(f"[interpret.py]: ERROR (12) - Can't write to stati file {self.stati}\n")
+                sys.exit(12)
 
 
-    # main public func. - runs the code
-    def run_code_xml(self, str_ippcode23_xml): 
+    # main public func. - runs the script -> interface
+    # the manager class
+    def run_script(self): 
 
-        # parse the instructions
-        inst = self.parse_instructions(str_ippcode23_xml)
+        # parse the instructions onto an array of instructions
+        inst = self.input_parse.parse_instructions(self.source)
 
         # run the instructions
-        self.run_instructions(inst)
+        symt_jump = self.init_symt_jump(inst)       # searches for labels and saves their position
+        self.run_instructions(inst, symt_jump)      # runs every instruction in the array of instructions
 
 
-    # private func. - parses the instructions into an array of instructions
-    def parse_instructions(self, str_ippcode23_xml):
 
-        # initialize instruction data
-        inst = []
+    # private func. - initializes the symt_jump class
+    def init_symt_jump(self, inst):
 
-        # get xml_tree children data
-        tree_root = ET.fromstring(str_ippcode23_xml)
-        tree_children = list(tree_root)
-
-        # reading tree_children -> instruction data
-        for child in tree_children:
-            
-            # get instruction data
-            instruction = self.Instruction(child.attrib.get("opcode"), child.attrib.get("order"), None, None, None, None, None, None)
-
-            # get xml_tree sub_children data
-            tree_sub_children = list(child)
-            sub_child_index = 0
-
-            # reading tree_sub_children -> instruction arguments
-            for sub_child_index, sub_child in enumerate(tree_sub_children):
-                
-                # get instruction argument data
-                if sub_child_index == 0:
-                    instruction.arg1_type = sub_child.attrib.get("type")
-                    instruction.arg1_text = sub_child.text
-                elif sub_child_index == 1:
-                    instruction.arg2_type = sub_child.attrib.get("type")
-                    instruction.arg2_text = sub_child.text
-                elif sub_child_index == 2:
-                    instruction.arg3_type = sub_child.attrib.get("type")
-                    instruction.arg3_text = sub_child.text
-
-            inst.append(instruction) 
-        return inst
-
-
-    # private func. - runs the instructions
-    def run_instructions(self, inst):
-        
         # initialize the symt_jump class for jumps
         symt_jump = SymbolTableJump()       # symbol table for jumps
 
@@ -82,6 +85,11 @@ class Interpret:
 
             i += 1
 
+        return symt_jump
+
+
+    # private func. - runs every instruction in the array of instructions
+    def run_instructions(self, inst, symt_jump):
 
         # initialize the instruction execution class -> executes one instruction per method call
         runner = ExecuteInstruction()
@@ -103,9 +111,8 @@ class Interpret:
             "OR" : runner.execute_or,
             "NOT" : runner.execute_not,
             "INT2CHAR" : runner.execute_int2char,       # Conversion
-            "STRI2INT" : runner.execute_stri2int,            
-            "READ" : runner.execute_read,               # Input/Output
-            "WRITE" : runner.execute_write,
+            "STRI2INT" : runner.execute_stri2int,
+            "WRITE" : runner.execute_write,             # I/O  
             "CONCAT" : runner.execute_concat,           # String operations
             "STRLEN" : runner.execute_strlen,
             "GETCHAR" : runner.execute_getchar,
@@ -141,8 +148,13 @@ class Interpret:
         }
 
         # [6] - methods which returns a request value
-        opcode_request_methods = {
+        opcode_break_method = {
             "BREAK" : runner.execute_break,                 # Debugging
+        }
+
+        # [7] - methods which require input/output
+        opcode_read_method = {
+           "READ" : runner.execute_read,                   # Input/Output
         }
 
 
@@ -150,13 +162,12 @@ class Interpret:
         # reading instructions and calling the corresponding execution method
         i = 0
         while i < len(inst):
-            
-            # [0] - debug print
-            #print(i, "\n")
-            #print(inst[i].order, " - ", inst[i].opcode)
-            #print("\t",inst[i].arg1_type, " - ", inst[i].arg1_text)
-            #print("\t",inst[i].arg2_type, " - ", inst[i].arg2_text)
-            #print("\t",inst[i].arg3_type, " - ", inst[i].arg3_text, "\n")
+
+            # debug
+            sys.stderr.write(f"{inst[i].order} - {inst[i].opcode}\n")
+            sys.stderr.write(f"   {inst[i].arg1_type} {inst[i].arg1_text}\n")
+            sys.stderr.write(f"   {inst[i].arg2_type} {inst[i].arg2_text}\n")
+            sys.stderr.write(f"   {inst[i].arg3_type} {inst[i].arg3_text}\n\n")
 
             # [1] - basic instructions
             if inst[i].opcode in opcode_inst_methods:
@@ -205,15 +216,330 @@ class Interpret:
                     i = inst_order
 
             # [6] - request instruction
-            elif inst[i].opcode in opcode_request_methods:
-                opcode_request_methods[inst[i].opcode]()
+            elif inst[i].opcode in opcode_break_method:
+                opcode_break_method[inst[i].opcode]()
                 i += 1
-            
-            # [7] - uknown opcode
-            else: 
-                sys.stderr.write("Error: unknown opcode\n")
-                exit(53)
 
+            # [7] - read instruction
+            elif inst[i].opcode in opcode_read_method:
+                opcode_read_method[inst[i].opcode](inst[i], self.input)
+                i += 1
+            else:
+                sys.stderr.write(f"[interpret.py]: ERROR (32) - Interpret - run_instructions()\n")
+                sys.stderr.write(f"                NOTE - Unknown instruction ({inst[i].opcode})\n")
+                sys.exit(32)
+
+class InputParser:
+
+    # instruction data structure
+    # -> for saving instruction data
+    class Instruction:
+        def __init__(self, opcode, order, arg1_type, arg1_text, arg2_type, arg2_text, arg3_type, arg3_text):
+            self.opcode = opcode
+            self.order = order
+            self.arg1_type = arg1_type
+            self.arg1_text = arg1_text
+            self.arg2_type = arg2_type
+            self.arg2_text = arg2_text
+            self.arg3_type = arg3_type
+            self.arg3_text = arg3_text
+
+    # public func. - parses the instructions into an array of instructions
+    def parse_instructions(self, source):
+
+        # initialize instruction data
+        inst = []
+
+        # get xml_tree children data
+        try:
+            tree_root = ET.fromstring(source.read())
+        except:
+            sys.stderr.write(f"[interpret.py]: ERROR (31) - InputParser - parse_instructions()\n")
+            sys.stderr.write(f"                NOTE - Source file is not in xml format\n")
+            sys.exit(31)
+        
+        # get xml_tree children data
+        tree_children = list(tree_root)
+
+        # check root arg
+        if tree_root.tag != "program" or tree_root.attrib.get("language") != "IPPcode23":
+            sys.stderr.write(f"[interpret.py]: ERROR (32) - InputParser - parse_instructions()\n")
+            sys.stderr.write(f"                NOTE - Unknown root xml argument ({tree_root.tag})\n")
+            sys.exit(32)
+
+        # reading tree_children -> instruction data
+        order = 1
+        for child in tree_children:
+
+            # check if the root arg is valid
+            if (child.tag != "instruction"):
+                sys.stderr.write(f"[interpret.py]: ERROR (32) - InputParser - parse_instructions()\n")
+                sys.stderr.write(f"                NOTE - Unknown child xml argument ({child.tag})\n")
+                sys.exit(32)
+
+            # check if the order is valid
+            if (child.attrib.get is None) or (int(child.attrib.get('order')) != order):
+
+                # increace order if if order is higher than the current order
+                if (int(child.attrib.get('order')) > order):
+                    order = int(child.attrib.get('order'))
+                else:
+                    sys.stderr.write(f"[interpret.py]: ERROR (32) - InputParser - parse_instructions()\n")
+                    sys.stderr.write(f"                NOTE - Wrong xml instruction order ({child.attrib.get('order')})\n")
+                    sys.exit(32)
+            
+            # get instruction data
+            instruction = self.Instruction(child.attrib.get("opcode"), child.attrib.get("order"), None, None, None, None, None, None)
+
+            # get xml_tree sub_children data
+            tree_sub_children = list(child)
+            sub_child_index = 0
+
+            # reading tree_sub_children -> instruction arguments
+            for sub_child_index, sub_child in enumerate(tree_sub_children):
+                
+                # check if the argument is valid
+                if sub_child.tag != "arg" + str(sub_child_index + 1):
+                    sys.stderr.write(f"[interpret.py]: ERROR (32) - InputParser - parse_instructions()\n")
+                    sys.stderr.write(f"                NOTE - Unknown subchild xml argument ({sub_child.tag})\n")
+                    sys.exit(32)
+                
+                # get instruction argument data
+                if sub_child_index == 0:
+                    instruction.arg1_type = sub_child.attrib.get("type")
+                    instruction.arg1_text = sub_child.text
+                elif sub_child_index == 1:
+                    instruction.arg2_type = sub_child.attrib.get("type")
+                    instruction.arg2_text = sub_child.text
+                elif sub_child_index == 2:
+                    instruction.arg3_type = sub_child.attrib.get("type")
+                    instruction.arg3_text = sub_child.text
+                else:
+                    sys.stderr.write(f"[interpret.py]: ERROR (31) - InputParser - parse_instructions()\n")
+                    sys.stderr.write(f"                NOTE - Too many arguments , the maximum number of arguments is 3\n")
+                    sys.exit(31)
+
+            inst.append(instruction) 
+            order += 1
+        return inst
+    
+
+    ## Public func. - parses the arguments
+    #  - uses the argparse library
+    #  - returns the arguments (source_file, input_file, stati_file, stati_args[])
+    #
+    ## Returns errors
+    #  = 10 - missing/wrong arguments
+    def parse_arguments(self):
+
+        # initialize the argument parser
+        parser = argparse.ArgumentParser()
+
+        # default arguments
+        parser.add_argument("--source", help="source file", required=False)      # source file input
+        parser.add_argument("--input", help="input file", required=False)        # input file input
+        
+        # stati arguments -> to be implemented
+        parser.add_argument("--stati", help="stati", required=False)             # stati file output
+        parser.add_argument("--insts", help="insts", required=False)             # insts
+        parser.add_argument("--vars", help="vars", required=False)               # vars
+        parser.add_argument("--hot", help="hot", required=False)                 # hot
+        parser.add_argument("--frequent", help="frequent", required=False)       # frequent
+        parser.add_argument("--eol", help="eol", required=False)                 # eol
+
+        # parse the arguments
+        arg_source = parser.parse_args().source
+        arg_input = parser.parse_args().input
+        arg_stati = parser.parse_args().stati
+        stati_args = [arg_stati, parser.parse_args().insts, parser.parse_args().vars, parser.parse_args().hot, parser.parse_args().frequent, parser.parse_args().eol]
+
+        # check arg_souce and arg_input args -> one must be present
+        if arg_source == None and arg_input == None:
+            sys.stderr.write("[interpret.py]: ERROR (10) - Missing arguments: --source and --input\n")
+            sys.exit(10)
+
+        # return the arguments
+        return arg_source, arg_input, arg_stati, stati_args
+
+
+class VariableAnalysis:
+
+    def __init__(self):
+        pass
+
+    # public func. - analyzes the variable
+    def analyze_arg(self, inst_arg, inst_type):
+
+        var_scope = None 
+        var_value = None
+
+        # check the use case
+        if inst_type == None:
+            sys.stderr.write("[interpret.py]: ERROR (99) - VariableAnalysis - analyze_arg()\n")
+            sys.stderr.write(f"               NOTE - (internal error) - Var type = None - wrong usecase of the function\n")
+            sys.exit(99)
+
+        # change inst_arg_type to ""
+        if inst_arg == None:
+            inst_arg = ""
+
+        # var type
+        if inst_type == "var":
+            var_scope, var_value = self.analyze_var(inst_arg)
+
+        # string type
+        elif inst_type == "string":
+            var_value = self.analyze_string(inst_arg)
+
+        # int type
+        elif inst_type == "int":
+            var_value = self.analyze_int(inst_arg)
+                    
+        # bool type
+        elif inst_type == "bool":
+            var_value = self.analyze_bool(inst_arg)
+                    
+        # nil type
+        elif inst_type== "nil":
+            var_value = self.analyze_nil(inst_arg)
+                    
+        # label type
+        elif inst_type== "label":
+            var_value = self.analyze_label(inst_arg)
+                    
+        # type typo
+        elif inst_type == "type":
+            var_value = self.analyze_type(inst_arg)
+
+        # unknown type
+        else:
+            sys.stderr.write("[interpret.py]: ERROR (32) - VariableAnalysis - analyze_arg()\n")
+            sys.stderr.write(f"               NOTE - Unknown var type was used\n")
+            sys.stderr.write(f"               VAR  - <{inst_type}>, {inst_arg}\n")
+            sys.exit(32)
+
+        # return value
+        return var_value, var_scope
+
+
+    def analyze_var(self, input_var):
+
+        # regex for checkign the input_var format
+        if not re.match(r"^(GF|LF|TF)@([a-zA-Z0-9-_&%$*!?]+)$", input_var):
+            sys.stderr.write("[interpret.py]: ERROR (53) - VariableAnalysis - analyze_var()\n")
+            sys.stderr.write(f"               NOTE   - Wrong var operand format\n")
+            sys.stderr.write(f"               BAR - {input_var}\n")
+            sys.exit(53)
+
+        # check if the variable does not start with a number
+        if re.match(r"^(GF|LF|TF)@[0-9]", input_var):
+            sys.stderr.write("[interpret.py]: ERROR (53) - VariableAnalysis - analyze_var()\n")
+            sys.stderr.write(f"               NOTE   - Wrong var operand format\n")
+            sys.stderr.write(f"               BAR - {input_var}\n")
+            sys.exit(53)
+
+        # split the string into parts -> first @ indicates the split symbol
+        var_data = input_var.split("@", 1)
+
+        return var_data[0], var_data[1]
+
+
+    def analyze_string(self, input_string):
+
+        # check if the string is empty
+        if input_string == "" or input_string is None:
+            return ""
+
+        # check if the string var starts with string@ and does not contain ["#", " "]
+        if not re.match(r"^[^# ]*$", input_string):
+            sys.stderr.write("[interpret.py]: ERROR (53) - VariableAnalysis - analyze_string()\n")
+            sys.stderr.write(f"               NOTE   - Wrong string operand format\n")
+            sys.stderr.write(f"               STRING - {input_string}\n")
+            sys.exit(53)
+
+        # if '\' is in the string allow use only with the combination '[\][0-9]{3}'
+        if not re.match(r"^(?!.*\\(?![0-9]{3})).*$", input_string):
+            sys.stderr.write("[interpret.py]: ERROR (53) - VariableAnalysis - analyze_string()\n")
+            sys.stderr.write(f"               NOTE   - Wrong string operand format\n")
+            sys.stderr.write(f"               STRING - {input_string}\n")
+            sys.exit(53)
+
+        # decode the "[\][0-9]{3}" into the correct characters the three digits represent UTF-8 code
+        input_string = re.sub(r"\\([0-9]{3})", lambda x: chr(int(x.group(1))),input_string)
+
+        # return the new string
+        return input_string
+
+    def analyze_int(self, input_int):
+
+        # check if the string var starts with int@
+        if not re.match(r"^[-+]?[0-9]+$", input_int):
+            sys.stderr.write("[interpret.py]: ERROR (53) - VariableAnalysis - analyze_int()\n")
+            sys.stderr.write(f"               NOTE - Wrong int operand format\n")
+            sys.stderr.write(f"               INT  - {input_int}\n")
+            sys.exit(53)
+        
+        # try to convert the string into int
+        try:
+            input_int = int(input_int)
+        except ValueError:
+            sys.stderr.write("[interpret.py]: ERROR (53) - VariableAnalysis - analyze_int()\n")
+            sys.stderr.write(f"               NOTE - Wrong int operand format\n")
+            sys.stderr.write(f"               INT  - {input_int}\n")
+            sys.exit(53)
+
+        # return the new int
+        return str(input_int)
+    
+    def analyze_bool(self, input_bool):
+
+        # check if the string var starts with bool@
+        if not re.match(r"^(true|false)$", input_bool):
+            sys.stderr.write("[interpret.py]: ERROR (53) - VariableAnalysis - analyze_bool()\n")
+            sys.stderr.write(f"               NOTE - Wrong bool operand format\n")
+            sys.stderr.write(f"               BOOL - {input_bool}\n")
+            sys.exit(53)
+
+        # return the new bool
+        return input_bool
+
+    def analyze_nil(self, input_nil):
+
+        # check if the string var starts with nil@
+        if input_nil == "nil" or input_nil == "":
+            pass
+        else:
+            sys.stderr.write("[interpret.py]: ERROR (53) - VariableAnalysis - analyze_string()\n")
+            sys.stderr.write(f"               NOTE - Wrong nil operand format\n")
+            sys.stderr.write(f"               NIL  - {input_nil}\n")
+            sys.exit(53)
+
+        # return the new nil
+        return ""
+
+    def analyze_label(self, input_label):
+            
+        # check if the string var starts with label@ and does not contain ["#", " "]
+        if not re.match(r"^[^# ]*$", input_label):
+            sys.stderr.write("[interpret.py]: ERROR (53) - VariableAnalysis - analyze_label()\n")
+            sys.stderr.write(f"               NOTE  - Wrong label operand format\n")
+            sys.stderr.write(f"               LABEL - {input_label}\n")
+            sys.exit(53)
+
+        # return the new label
+        return input_label
+
+    def analyze_type(self, input_type):
+            
+        # check if the string var starts with type@ and does not contain ["#", " "]
+        if not re.match(r"^[^# ]*$", input_type):
+            sys.stderr.write("[interpret.py]: ERROR (53) - VariableAnalysis - analyze_type()\n")
+            sys.stderr.write(f"               NOTE  - Wrong label operand format\n")
+            sys.stderr.write(f"               TYPE - {input_type}\n")
+            sys.exit(53)
+
+        # return the new type
+        return input_type
 
 
 # private classes called by method run_code_xml in interpret class
@@ -226,7 +552,9 @@ class ExecuteInstruction:
         self.data_stack = DataStack()            # data stack
         self.func_stack = FuncCallStack()        # function call stack
         self.frame_data = FrameStackProtocol()   # interface for the frame stack
-        self.decode = DecodeVariables()          # decode variable quirks
+        self.inspect = VariableAnalysis()        # decode variable quirks
+        
+        self.decode = DecodeVariables()           # decode variables
 
 
     # Debug print -> this method is temporary, will be removed in the future
@@ -248,35 +576,29 @@ class ExecuteInstruction:
     # DEFVAR
     def execute_defvar(self, inst):
         
-        # check the variable type
-        if inst.arg1_type == "var":
+        # insert the variable into the symbol table
+        self.frame_data.symt_insert_var(inst.arg1_text)
 
-            # insert the variable into the symbol table
-            self.frame_data.symt_insert_var(inst.arg1_text)
-        else: 
-            sys.stderr.write("Error: DEFVAR - invalid argument type\n")
-            exit(56)
 
     # MOVE
     def execute_move(self, inst):
         
-        # check the variable type
-        if inst.arg2_type == "var":
+        # get the variable data from the symbol table and update the variable
+        var_type, var_data = self.frame_data.symt_get_symb(inst, "universal", "arg2")
 
-            # get the variable data from the symbol table and update the variable
-            var_type, var_data = self.frame_data.symt_gather_var(inst.arg2_text)
-            self.frame_data.symt_update_var(inst.arg1_text, var_type, var_data)
-        else:
-            # get the variable data from the instruction and update the variable
-            self.frame_data.symt_update_var(inst.arg1_text, inst.arg2_type, inst.arg2_text)    
+        # update the variable
+        self.frame_data.symt_update_var(inst.arg1_text, var_type, var_data)
+
 
     # CREATEFRAME
     def execute_createframe(self):
         self.frame_data.frame_stack_create()
 
+
     # PUSHFRAME
     def execute_pushframe(self):
         self.frame_data.frame_stack_push()
+
 
     # POPFRAME
     def execute_popframe(self):
@@ -290,7 +612,7 @@ class ExecuteInstruction:
     # CALL
     def execute_call(self, inst, symt_jump, push_inst_order):
 
-        # get inst order
+        self.inspect.analyze_arg(inst.arg1_text, "label")
         inst_order = symt_jump.get_label(inst.arg1_text)
 
         # push the current instruction order to the stack
@@ -298,6 +620,7 @@ class ExecuteInstruction:
 
         # return the instruction order
         return inst_order
+
     
     # RETURN
     def execute_return(self):
@@ -350,29 +673,34 @@ class ExecuteInstruction:
         # update the variable
         self.frame_data.symt_update_var(inst.arg1_text, "int", str(var_add))
 
+
     # SUB
     def execute_sub(self, inst):
-        
-        # get the variables
-        _, var_data_1, _, var_data_2 = self.frame_data.symt_get_symb1_symb2(inst, "arithmetic", "same")
 
-        # add the variables
-        var_sub = int(var_data_1) - int(var_data_2)
+            # get the variables
+            _, var_data_1, _, var_data_2 = self.frame_data.symt_get_symb1_symb2(inst, "arithmetic", "same")
 
-        # update the variable
-        self.frame_data.symt_update_var(inst.arg1_text, "int", str(var_sub))
+            # add the variables
+            var_sub = int(var_data_1) - int(var_data_2)
+
+            # update the variable
+            self.frame_data.symt_update_var(inst.arg1_text, "int", str(var_sub))
+
 
     # MUL
     def execute_mul(self, inst):
 
-        # get the variables
-        _, var_data_1, _, var_data_2 = self.frame_data.symt_get_symb1_symb2(inst, "arithmetic", "same")
+        if inst.arg1_type == "var":
 
-        # add the variables
-        var_mul = int(var_data_1) * int(var_data_2)
+            # get the variables
+            _, var_data_1, _, var_data_2 = self.frame_data.symt_get_symb1_symb2(inst, "arithmetic", "same")
 
-        # update the variable
-        self.frame_data.symt_update_var(inst.arg1_text, "int", str(var_mul))
+            # add the variables
+            var_mul = int(var_data_1) * int(var_data_2)
+
+            # update the variable
+            self.frame_data.symt_update_var(inst.arg1_text, "int", str(var_mul))
+
 
     # IDIV
     def execute_idiv(self, inst):
@@ -382,13 +710,15 @@ class ExecuteInstruction:
 
         # catch division by zero
         if var_data_2 == "0":
-            sys.stderr.write("Error: IDIV - unleageal division by zero\n")
-            exit(57)
+            sys.stderr.write(f"[interpret.py]: ERROR (57) - ExecuteInstruction - execute_idiv()\n")
+            sys.stderr.write(f"                NOTE - Illegal division by zero\n")
+            sys.stderr.write(f"                INST - [{inst.order}] {inst.opcode} - {inst.arg2_type} {inst.arg3_type}\n")
+            sys.exit(57)
 
         else:
             # add the variables
             var_idiv = int(var_data_1) // int(var_data_2)
-
+            
             # update the variable
             self.frame_data.symt_update_var(inst.arg1_text, "int", str(var_idiv))
 
@@ -423,6 +753,11 @@ class ExecuteInstruction:
                 self.frame_data.symt_update_var(inst.arg1_text, "bool", "true")
             else:
                 self.frame_data.symt_update_var(inst.arg1_text, "bool", "false")
+        else:
+            sys.stderr.write(f"[interpret.py]: ERROR (53) - ExecuteInstruction - execute_lt()\n")
+            sys.stderr.write(f"                NOTE - Wrong variable types, expected <int, bool, string>\n")
+            sys.stderr.write(f"                INST - [{inst.order}] {inst.opcode} - {inst.arg2_type} {inst.arg3_type}\n")
+            sys.exit(53)   
 
     # GT
     def execute_gt(self, inst):
@@ -450,33 +785,59 @@ class ExecuteInstruction:
                 self.frame_data.symt_update_var(inst.arg1_text, "bool", "true")
             else:
                 self.frame_data.symt_update_var(inst.arg1_text, "bool", "false")
+        
+        # compare the nil variables
+        else:
+            sys.stderr.write(f"[interpret.py]: ERROR (53) - ExecuteInstruction - execute_gt()\n")
+            sys.stderr.write(f"                NOTE - Wrong variable types, expected <int, bool, string>\n")
+            sys.stderr.write(f"                INST - [{inst.order}] {inst.opcode} - {inst.arg2_type} {inst.arg3_type}\n")
+            sys.exit(53)   
 
     # EQ
     def execute_eq(self, inst):
         
         # get the variables
-        var_type, var_data_1, _, var_data_2 = self.frame_data.symt_get_symb1_symb2(inst, "relational", "same")
+        var_type_1, var_data_1, var_type_2, var_data_2 = self.frame_data.symt_get_symb1_symb2(inst, "relational", "different")
 
-        # compare the int variables
-        if var_type == "int":
-            if int(var_data_1) == int(var_data_2):
+        # if var_data_1 or var_data_2 is nil
+        if var_type_1 == "nil" or var_type_2 == "nil":
+
+            # compare the nil variables
+            if var_type_1 == var_type_2:
                 self.frame_data.symt_update_var(inst.arg1_text, "bool", "true")
             else:
                 self.frame_data.symt_update_var(inst.arg1_text, "bool", "false")
 
-        # compare the string variables
-        elif var_type == "string":
-            if var_data_1 == var_data_2:
-                self.frame_data.symt_update_var(inst.arg1_text, "bool", "true")
-            else:
-                self.frame_data.symt_update_var(inst.arg1_text, "bool", "false")
+        # compare other types
+        else:
 
-        # compare the bool variables
-        elif var_type == "bool":
-            if var_data_1 == var_data_2:
-                self.frame_data.symt_update_var(inst.arg1_text, "bool", "true")
+            # compare the int variables
+            if var_type_1 == "int" and var_type_2 == "int":
+                if int(var_data_1) == int(var_data_2):
+                    self.frame_data.symt_update_var(inst.arg1_text, "bool", "true")
+                else:
+                    self.frame_data.symt_update_var(inst.arg1_text, "bool", "false")
+
+            # compare the string variables
+            elif var_type_1 == "string" and var_type_2 == "string":
+                if var_data_1 == var_data_2:
+                    self.frame_data.symt_update_var(inst.arg1_text, "bool", "true")
+                else:
+                    self.frame_data.symt_update_var(inst.arg1_text, "bool", "false")
+
+            # compare the bool variables
+            elif var_type_1 == "bool" and var_type_2 == "bool":
+                if var_data_1 == var_data_2:
+                    self.frame_data.symt_update_var(inst.arg1_text, "bool", "true")
+                else:
+                    self.frame_data.symt_update_var(inst.arg1_text, "bool", "false")
+            
+            # wrong types
             else:
-                self.frame_data.symt_update_var(inst.arg1_text, "bool", "false")
+                sys.stderr.write(f"[interpret.py]: ERROR (53) - ExecuteInstruction - execute_eq()\n")
+                sys.stderr.write(f"                NOTE - Wrong variable types, expected two same types as second and third argument\n")
+                sys.stderr.write(f"                INST - [{inst.order}] {inst.opcode} - {inst.arg2_type} {inst.arg3_type}\n")
+                sys.exit(53)                
 
 
     # - - - - - - - - - - - - #
@@ -534,8 +895,10 @@ class ExecuteInstruction:
         try:
             char = chr(int(var_data))
         except ValueError:
-            sys.stderr.write("Error: invalid value of type int\n")
-            exit(58)
+            sys.stderr.write(f"[interpret.py]: ERROR (58) - ExecuteInstruction - execute_int2char()\n")
+            sys.stderr.write(f"                NOTE - Int can't be converted into chat\n")
+            sys.stderr.write(f"                INST - [{inst.order}] {inst.opcode} {inst.arg2_text}\n")
+            sys.exit(58)
 
         # update value
         self.frame_data.symt_update_var(inst.arg1_text, "string", str(char))
@@ -548,14 +911,16 @@ class ExecuteInstruction:
         char_pos = int(var_data_2)
 
         # check the string index with char_pos position
-        if char_pos < len(var_data_1):
+        if char_pos < len(var_data_1) and char_pos > -1:
             char = var_data_1[char_pos]
         else:
-            sys.stderr.write("Error: string index out of range\n")
-            exit(58)            
+            sys.stderr.write(f"[interpret.py]: ERROR (58) - ExecuteInstruction - execute_stri2int()\n")
+            sys.stderr.write(f"                NOTE - String index out of range\n")
+            sys.stderr.write(f"                INST - [{inst.order}] {inst.opcode} {inst.arg2_text}\n")
+            sys.exit(58)
 
         # update value
-        self.frame_data.symt_update_var(inst.arg1_text, "int", ord(char))
+        self.frame_data.symt_update_var(inst.arg1_text, "int", str(ord(char)))
 
 
     # - - - - - - - - - - - - #
@@ -563,91 +928,73 @@ class ExecuteInstruction:
     # - - - - - - - - - - - - #
 
     # READ
-    def execute_read(self, inst):
-
-        # check if there is input
-        try: 
-            new_data = input()
+    def execute_read(self, inst, input_source):
+        
+        # check the variable type
+        if inst.arg2_text == "int" or inst.arg2_text == "bool" or inst.arg2_text == "string":
             data_type = inst.arg2_text
+        else:
+            sys.stderr.write(f"[interpret.py]: ERROR (53) - ExecuteInstruction - execute_read()\n")
+            sys.stderr.write(f"                NOTE - Wrong variable type, expected int, bool or string\n")
+            sys.stderr.write(f"                INST - [{inst.order}] {inst.opcode} {inst.arg2_text}\n")
+            sys.exit(53)
 
-        except EOFError:
+        # get the right source - stdin or file
+        if input_source == None:
             data_type = "nil"
-            new_data = "nil"
 
+        elif input_source == sys.stdin:
+            new_data = input()
+        else:
+            new_data = input_source.readline()
 
-        # check the type and value of input
-        if new_data == None:
+        # check if the new_data are empty
+        if new_data == "" or new_data is None:
             data_type = "nil"
-            new_data = "nil"
 
-        # if is int
+        # remove \n from the end of the string
+        if new_data != "" and new_data[-1] == "\n":
+            new_data = new_data[:-1]
+
+        # check the new given data
+        # string
+        if data_type == "string":
+
+            # change every non-alphanumeric character to its ASCII code in formal \[0-9][0-9][0-9]
+            new_data = re.sub(r"([\W\s])", lambda m: fr"\{ord(m.group(1)):03d}", new_data)
+
+            # update value
+            self.frame_data.symt_update_var(inst.arg1_text, "string", new_data)
+            
+        # int
         elif data_type == "int":
-            try:
-                int(new_data)
-            except ValueError:
-                data_type = "nil"
-                new_data = "nil"  
-
-        # if is bool
+            if re.match(r"^[-+]?[0-9]+$", new_data):
+                self.frame_data.symt_update_var(inst.arg1_text, "int", new_data)
+            else:
+                self.frame_data.symt_update_var(inst.arg1_text, "nil", "")
+            
+        # bool
         elif data_type == "bool":
             new_data = new_data.lower()
-            if new_data != "true" and new_data != "false":
-                data_type = "nil"
-                new_data = "nil"
-        
-        # if is string
-        elif data_type == "string":
-            print("string")
-            if not re.match(r'^([^\s#\\\\]|\\\\[0-9]{3})*$', new_data):
-                data_type = "nil"
-                new_data = "nil"
-        else:
-            data_type = "nil"
-            new_data = "nil"
+            if re.match(r"^(true|false)$", new_data):
+                self.frame_data.symt_update_var(inst.arg1_text, "bool", new_data)
+            else:
+                self.frame_data.symt_update_var(inst.arg1_text, "bool", "false")
 
-        # update variable data
-        self.frame_data.symt_update_var(inst.arg1_text, data_type, new_data)
+        # nil
+        else:
+            self.frame_data.symt_update_var(inst.arg1_text, "nil", "")
     
+
     # WRITE
     def execute_write(self, inst):
 
         # get variable data
-        if inst.arg1_type == "var":
-            var_type, var_data = self.frame_data.symt_gather_var(inst.arg1_text)
-            
-            # print empty string
-            if var_type == "nil":
-                print("", end="")
+        _, var_data = self.frame_data.symt_get_symb(inst, "universal", "arg1")
 
-            # print the value of variable
-            elif var_data == None:
-                print("", end="")
+        # print variable
+        print(var_data, end="")
 
-            # print the value of variable
-            else:
-                print(var_data, end="")
-
-        # print string from given data
-        else:
-
-            # print None value
-            if inst.arg1_text == None:
-                print("", end="")
-            
-            # print by type
-            else:
-                # print string type
-                if inst.arg1_type == "string":
-                    string = self.decode.string(inst.arg1_text)
-                    print(string, end="")
-
-                # print nil type
-                elif inst.arg1_type == "nil":
-                    print("", end="")
-
-                # print other types
-                else:
-                    print(inst.arg1_text, end="")
 
     # - - - - - - - - - - - - #
     #    String operations    #
@@ -659,16 +1006,6 @@ class ExecuteInstruction:
         # get the variables
         _, var_data_1, _, var_data_2 = self.frame_data.symt_get_symb1_symb2(inst, "string_string", "same")
 
-        # decode the strings
-        var_data_1 = self.decode.string(var_data_1)
-        var_data_2 = self.decode.string(var_data_2)
-
-        # check if the string are not empty
-        if (var_data_1 == None):
-            var_data_1 = ""
-        elif (var_data_2 == None):
-            var_data_2 = ""
-
         # concatenate strings
         self.frame_data.symt_update_var(inst.arg1_text, "string", var_data_1 + var_data_2)
 
@@ -678,14 +1015,8 @@ class ExecuteInstruction:
         # get the variables
         _, var_data = self.frame_data.symt_get_symb(inst, "string", "arg2")
 
-        # decode the string
-        var_data = self.decode.string(var_data)
-
         # get the string length
-        if var_data == None:
-            self.frame_data.symt_update_var(inst.arg1_text, "int", 0)
-        else:
-            self.frame_data.symt_update_var(inst.arg1_text, "int", len(var_data))
+        self.frame_data.symt_update_var(inst.arg1_text, "int", str(len(var_data)))
 
     # GETCHAR
     def execute_getchar(self, inst):
@@ -697,16 +1028,20 @@ class ExecuteInstruction:
         var_string = self.decode.string(var_string)
 
         # check the string index with char_pos position
-        if len(var_string) < int(var_int):
-            sys.stderr.write("Error: string index out of range\n")
-            exit(58)
+        if len(var_string) < int(var_int) or int(var_int) < 0:
+            sys.stderr.write(f"[interpret.py]: ERROR (58) - ExecuteInstruction - execute_getchar()\n")
+            sys.stderr.write(f"                NOTE - String index out of range\n")
+            sys.stderr.write(f"                INST - [{inst.order}] {inst.opcode} {var_string} {var_int}\n")
+            sys.exit(58)
 
         # get the char
         try:
             char = var_string[int(var_int)]
         except IndexError:
-            sys.stderr.write("Error: string index out of range\n")
-            exit(58)
+            sys.stderr.write(f"[interpret.py]: ERROR (58) - ExecuteInstruction - execute_getchar()\n")
+            sys.stderr.write(f"                NOTE - String index out of range\n")
+            sys.stderr.write(f"                INST - [{inst.order}] {inst.opcode} {var_string} {var_int}\n")
+            sys.exit(58)
 
         # update value
         self.frame_data.symt_update_var(inst.arg1_text, "string", char)
@@ -719,42 +1054,26 @@ class ExecuteInstruction:
         _, var_int, _, var_string = self.frame_data.symt_get_symb1_symb2(inst, "int_string", "different")
 
         # check the var and get the data
-        if inst.arg1_type == "var":
-            var_type, var_data = self.frame_data.symt_gather_var(inst.arg1_text)
-            
-            if var_type != "string":
-                sys.stderr.write("Error: invalid type of variable\n")
-                exit(53) 
-        else:
-            sys.stderr.write("Error: invalid type of variable\n")
-            exit(53)
+        var_type, var_data = self.frame_data.symt_gather_var(inst.arg1_text)
 
-        # check the string index with char_pos position
-        # check the var_int
-        if var_int == None:
-            var_int = "0"
+        # check the var type
+        if var_type != "string":
+            sys.stderr.write(f"[interpret.py]: ERROR (53) - ExecuteInstruction - execute_setchar()\n")
+            sys.stderr.write(f"                NOTE - String index out of range\n")
+            sys.stderr.write(f"                INST - [{inst.order}] {inst.opcode} {inst.arg1_text} {var_int} {var_string}\n")
+            sys.exit(53)
 
-        # check var_data
-        if var_data == None:
-            var_data = ""
-
-        # check the var_string
-        if var_string == None:
-            var_string = ""
-
-        elif len(var_string) <= int(var_int):
-            sys.stderr.write("Error: string index out of range\n")
-            exit(58)
-
-        # check if var_string is not empty
-        if var_string == None:
-            sys.stderr.write("Error: invalid value of type string\n")
-            exit(58)
+        # check var_string, var_data and var_int
+        if len(var_data) <= int(var_int) or int(var_int) < 0 or var_data == "" or var_string == "":
+            sys.stderr.write(f"[interpret.py]: ERROR (58) - ExecuteInstruction - execute_setchar()\n")
+            sys.stderr.write(f"                NOTE - String index out of range\n")
+            sys.stderr.write(f"                INST - [{inst.order}] {inst.opcode} {inst.arg1_text} {var_int} {var_string}\n")
+            sys.exit(58)
 
         # modify the var data string
-        var_data = var_data[:int(var_int)] + var_string[0] + var_data[int(var_int) + 1:]
+        var_data = var_data[:int(var_int)] + var_string[0] + var_data[int(var_int)+1:]
 
-        # update value
+        # update values
         self.frame_data.symt_update_var(inst.arg1_text, "string", var_data)
 
 
@@ -766,10 +1085,25 @@ class ExecuteInstruction:
     def execute_type(self, inst):
 
         # get variable data
-        var_type, _ = self.frame_data.symt_get_symb(inst, "universal", "arg2")        
+        if inst.arg2_type == "var":
+            var_type = self.frame_data.symt_gather_type(inst.arg2_text)   
+        else:
+            var_type = inst.arg2_type
 
-        # update variable data
-        self.frame_data.symt_update_var(inst.arg1_text, "string", var_type)
+        # none variable type
+        if var_type is None:
+            self.frame_data.symt_update_var(inst.arg1_text, "string", "")
+
+        # right variable type
+        elif var_type == "int" or var_type == "bool" or var_type == "string" or var_type == "nil":
+            self.frame_data.symt_update_var(inst.arg1_text, "string", var_type)
+        
+        # wrong variable type
+        else:
+            sys.stderr.write(f"[interpret.py]: ERROR (53) - ExecuteInstruction - execute_type()\n")
+            sys.stderr.write(f"                NOTE - Invalid type as second argument\n")
+            sys.stderr.write(f"                INST - [{inst.order}] {inst.opcode} {inst.arg1_text} {inst.arg2_text}\n")
+            sys.exit(53)
 
 
     # - - - - - - - - - - - - #
@@ -790,55 +1124,97 @@ class ExecuteInstruction:
     def execute_jumpifeq(self, inst, symt_jump):
 
         # get the variables
-        var_type, var_data_1, _, var_data_2 = self.frame_data.symt_get_symb1_symb2(inst, "relational", "same")
+        var_type_1, var_data_1, var_type_2, var_data_2 = self.frame_data.symt_get_symb1_symb2(inst, "relational", "different")
 
-        # compare the int variables
-        if var_type == "int":
-            if int(var_data_1) == int(var_data_2):
+        # check if label exists
+        symt_jump.check_label(inst.arg1_text)
+
+        # if var_data_1 or var_data_2 is nil
+        if var_type_1 == "nil" or var_type_2 == "nil":
+            
+            # compare the nil variables
+            if var_type_1 == var_type_2:
                 return symt_jump.get_label(inst.arg1_text)
             else:
                 return -1
 
-        # compare the string variables
-        elif var_type == "string":
-            if var_data_1 == var_data_2:
-                return symt_jump.get_label(inst.arg1_text)
-            else:
-                return -1
+        # compare other types
+        else:
+            # compare the int variables
+            if var_type_1 == "int" and var_type_2 == "int":
+                if int(var_data_1) == int(var_data_2):
+                    return symt_jump.get_label(inst.arg1_text)
+                else:
+                    return -1
 
-        # compare the bool variables
-        elif var_type == "bool":
-            if var_data_1 == var_data_2:
-                return symt_jump.get_label(inst.arg1_text)
+            # compare the string variables
+            elif var_type_1 == "string" and var_type_2 == "string":
+                if var_data_1 == var_data_2:
+                    return symt_jump.get_label(inst.arg1_text)
+                else:
+                    return -1
+
+            # compare the bool variables
+            elif var_type_1 == "bool" and var_type_2 == "bool":
+                if var_data_1 == var_data_2:
+                    return symt_jump.get_label(inst.arg1_text)
+                else:
+                    return -1
+            
+            # wrong types
             else:
-                return -1
+                sys.stderr.write(f"[interpret.py]: ERROR (53) - ExecuteInstruction - execute_jumpifneq()\n")
+                sys.stderr.write(f"                NOTE - Wrong variable types, expected two same types as second and third argument\n")
+                sys.stderr.write(f"                INST - [{inst.order}] {inst.opcode} - {inst.arg2_type} {inst.arg3_type}\n")
+                sys.exit(53)   
 
     # JUMPIFNEQ
     def execute_jumpifneq(self, inst, symt_jump):
 
         # get the variables
-        var_type, var_data_1, _, var_data_2 = self.frame_data.symt_get_symb1_symb2(inst, "relational", "same")
+        var_type_1, var_data_1, var_type_2, var_data_2 = self.frame_data.symt_get_symb1_symb2(inst, "relational", "different")
 
-        # compare the int variables
-        if var_type == "int":
-            if int(var_data_1) != int(var_data_2):
+        # check if label exists
+        symt_jump.check_label(inst.arg1_text)
+
+        # if var_data_1 or var_data_2 is nil
+        if var_type_1 == "nil" or var_type_2 == "nil":
+            
+            # compare the nil variables
+            if var_type_1 != var_type_2:
                 return symt_jump.get_label(inst.arg1_text)
             else:
                 return -1
 
-        # compare the string variables
-        elif var_type == "string":
-            if var_data_1 != var_data_2:
-                return symt_jump.get_label(inst.arg1_text)
-            else:
-                return -1
+        # compare other types
+        else:
+            # compare the int variables
+            if var_type_1 == "int" and var_type_2 == "int":
+                if int(var_data_1) != int(var_data_2):
+                    return symt_jump.get_label(inst.arg1_text)
+                else:
+                    return -1
 
-        # compare the bool variables
-        elif var_type == "bool":
-            if var_data_1 != var_data_2:
-                return symt_jump.get_label(inst.arg1_text)
+            # compare the string variables
+            elif var_type_1 == "string" and var_type_2 == "string":
+                if var_data_1 != var_data_2:
+                    return symt_jump.get_label(inst.arg1_text)
+                else:
+                    return -1
+
+            # compare the bool variables
+            elif var_type_1 == "bool" and var_type_2 == "bool":
+                if var_data_1 != var_data_2:
+                    return symt_jump.get_label(inst.arg1_text)
+                else:
+                    return -1
+            
+            # wrong types
             else:
-                return -1
+                sys.stderr.write(f"[interpret.py]: ERROR (53) - ExecuteInstruction - execute_jumpifneq()\n")
+                sys.stderr.write(f"                NOTE - Wrong variable types, expected two same types as second and third argument\n")
+                sys.stderr.write(f"                INST - [{inst.order}] {inst.opcode} - {inst.arg2_type} {inst.arg3_type}\n")
+                sys.exit(53)   
 
     # EXIT
     def execute_exit(self, inst):
@@ -848,8 +1224,11 @@ class ExecuteInstruction:
 
         # check if the integer is in interval <0,49>
         if int(var_data) < 0 or int(var_data) > 49:
-            sys.stderr.write("Error: wrong value of exit code\n")
-            exit(57)
+            sys.stderr.write(f"[interpret.py]: ERROR (57) - ExecuteInstruction - execute_exit()\n")
+            sys.stderr.write(f"                NOTE - Wrong value of the exit code, return value has to be in <0,49>\n")
+            sys.stderr.write(f"                VAR  - <{inst.arg2_type}>, {inst.arg2_text}\n")
+            sys.stderr.write(f"                INST - [{inst.order}] {inst.opcode} {var_data}\n")
+            sys.exit(57)
 
         # exit the program
         exit(int(var_data))
@@ -861,20 +1240,13 @@ class ExecuteInstruction:
 
     # DPRINT
     def execute_dprint(self, inst):
+        
         # get variable data
-        if inst.arg1_type == "var":
-            _, var_data = self.frame_data.symt_gather_var(inst.arg1_text)
-            sys.stderr.write(var_data)
+        _, var_data = self.frame_data.symt_get_symb(inst, "universal", "arg1")
 
-        # print string from given data
-        else:
+        # print variable data    
+        sys.stderr.write(var_data)
 
-            # decodes string and then prints it
-            if inst.arg1_type == "string":
-                string = self.decode.string(inst.arg1_text)
-                sys.stderr.write(string)
-            else:
-                sys.stderr.write(inst.arg1_text)
 
     # BREAK
     def execute_break(self):
@@ -904,6 +1276,7 @@ class FrameStackProtocol:
 
         # init decode object
         self.decode = DecodeVariables()
+        self.inspect = VariableAnalysis() 
 
 
     # - - - - - - - - - - #
@@ -942,10 +1315,7 @@ class FrameStackProtocol:
     def symt_insert_var(self, var_text):
 
         # get variable scope and name
-        str_tmp = var_text.split("@", 1)
-        var_scope = str_tmp[0]
-        var_name = str_tmp[1]
-
+        var_scope, var_name = self.inspect.analyze_var(var_text)
 
         # insert variable into the symbol table depening on the scope
         if var_scope == "GF" and self.symt_gf != None:
@@ -955,8 +1325,11 @@ class FrameStackProtocol:
         elif var_scope == "LF" and self.symt_lf != None:
             self.symt_lf.insert_key(var_name)
         else:
-            sys.stderr.write("Error: symt_insert_var - nowhere to insert variable\n")
-            exit(52)
+            sys.stderr.write(f"[interpret.py]: ERROR (55) - FrameStackProtocol - symt_insert_var()\n")
+            sys.stderr.write(f"                NOTE  - Variable isn't accesable in the frame\n")
+            sys.stderr.write(f"                VAR   - {var_text}\n")
+            sys.stderr.write(f"                FRAME - {var_scope} - Doesn't exists \n")
+            sys.exit(55)   
 
 
     # text is the variable name with scope
@@ -964,16 +1337,11 @@ class FrameStackProtocol:
     # value is the variable value
     def symt_update_var(self, var_text, var_type, var_value):
         
-        # get variable scope and name
-        str_tmp = var_text.split("@", 1)
-        var_scope = str_tmp[0]
-        var_name = str_tmp[1]
+        # decodes string var type and value
+        var_scope, var_name = self.inspect.analyze_var(var_text)
+        var_value, _ = self.inspect.analyze_arg(var_value, var_type)
 
-        # decodes string var type 
-        if var_type == "string":
-            var_value = self.decode.string(var_value)
-
-        # move value and type onto existing variable
+        # move value and type onto existing frame symtable
         if var_scope == "GF" and self.symt_gf != None:
             self.symt_gf.set_var(var_name, var_value, var_type)
         elif var_scope == "TF" and self.symt_tf != None:
@@ -981,8 +1349,11 @@ class FrameStackProtocol:
         elif var_scope == "LF" and self.symt_lf != None:
             self.symt_lf.set_var(var_name, var_value, var_type)
         else:
-            sys.stderr.write("Error: symt_update_var - nowhere to update the variable\n")
-            exit(52)   
+            sys.stderr.write(f"[interpret.py]: ERROR (55) - FrameStackProtocol - symt_update_var()\n")
+            sys.stderr.write(f"                NOTE  - Variable isn't accesable in the frame\n")
+            sys.stderr.write(f"                VAR   - {var_text} - <{var_type}>, {var_value}\n")
+            sys.stderr.write(f"                FRAME - {var_scope} - Doesn't exists \n")
+            sys.exit(55)   
     
 
     # var text is the variable name with scope
@@ -991,13 +1362,11 @@ class FrameStackProtocol:
     def symt_gather_var(self, var_text):
 
         # return var defalut initalization
-        var_type = ""
-        var_data = ""
+        var_type = None 
+        var_data = None                            
 
         # get variable scope and name
-        str_tmp = var_text.split("@", 1)
-        var_scope = str_tmp[0]
-        var_name = str_tmp[1]
+        var_scope, var_name = self.inspect.analyze_var(var_text)
 
         # go accoring to scope
         if var_scope == "GF" and self.symt_gf != None:
@@ -1007,11 +1376,46 @@ class FrameStackProtocol:
         elif var_scope == "LF" and self.symt_lf != None:
             var_data, var_type = self.symt_lf.get_var(var_name)
         else:
-            sys.stderr.write("Error: symt_gather_var - nowhere to gather the variable\n")
-            exit(52)
+            sys.stderr.write(f"[interpret.py]: ERROR (55) - FrameStackProtocol - symt_gather_var()\n")
+            sys.stderr.write(f"                NOTE  - Variable isn't accesable in the frame\n")
+            sys.stderr.write(f"                VAR   - {var_text} - <{var_type}>, {var_data}\n")
+            sys.stderr.write(f"                FRAME - {var_scope} - Doesn't exists \n")
+            sys.exit(55)   
+
+        # check if the var is not none
+        if var_type is None:
+            sys.stderr.write(f"[interpret.py]: ERROR (56) - FrameStackProtocol - symt_gather_var()\n")
+            sys.stderr.write(f"                NOTE  - Variable has no data_type\n")
+            sys.stderr.write(f"                VAR   - {var_text} - <{var_type}>, {var_data}\n")
+            sys.stderr.write(f"                FRAME - {var_scope} - Doesn't exists \n")
+            sys.exit(56)
 
         return var_type, var_data
 
+
+    # get the variable type
+    def symt_gather_type(self, var_text):
+        
+        var_type = None
+
+        # get variable scope and name
+        var_scope, var_name = self.inspect.analyze_var(var_text)
+
+        # go accoring to scope
+        if var_scope == "GF" and self.symt_gf != None:
+            _, var_type = self.symt_gf.get_var(var_name)
+        elif var_scope == "TF" and self.symt_tf != None:
+            _, var_type = self.symt_tf.get_var(var_name)
+        elif var_scope == "LF" and self.symt_lf != None:
+            _, var_type = self.symt_lf.get_var(var_name)
+        else:
+            sys.stderr.write(f"[interpret.py]: ERROR (55) - FrameStackProtocol - symt_gather_type()\n")
+            sys.stderr.write(f"                NOTE  - Variable isn't accesable in the frame\n")
+            sys.stderr.write(f"                VAR   - {var_text} - <{var_type}> \n")
+            sys.stderr.write(f"                FRAME - {var_scope} - Doesn't exists \n")
+            sys.exit(55)   
+
+        return var_type
 
     # - - - - - - - - - - - - - - #
     #  INSTRUCTION SYMT METHODS   #
@@ -1053,26 +1457,38 @@ class FrameStackProtocol:
             check_type = check_type_dict[type_option]
             arg_type, arg_text = arg_num_dict[arg_num]
         except KeyError:
-            sys.stderr.write("Error: ExecuteInstruction - Private method symtget_arithmetic - invalid type option\n")
-            exit(99)
+            sys.stderr.write(f"[interpret.py]: ERROR (99) - FrameStackProtocol - symt_get_symb()\n")
+            sys.stderr.write(f"                NOTE - (Internal error), invalid type_option argument  \n")
+            sys.exit(99)
 
 
         # get the second var data from the symbol table
         if arg_type == "var":
             var_type, var_data = self.symt_gather_var(arg_text)
+
+            # check if the variable is not None
+            if var_type is None:
+                sys.stderr.write(f"[interpret.py]: ERROR (56) - FrameStackProtocol - symt_get_symb()\n")
+                sys.stderr.write(f"                NOTE - Variable <symb> has no data_type\n")
+                sys.stderr.write(f"                VAR  - {inst.arg2_text} - <{var_type}>, {var_data}\n")
+                sys.exit(56)
             
-            # check if the variable is int
+            # check if the variable is in the correct type
             if var_type not in check_type:
-                sys.stderr.write("Error: - invalid second variable type\n")
-                exit(53)
+                sys.stderr.write(f"[interpret.py]: ERROR (53) - FrameStackProtocol -> symt_get_symb()\n")
+                sys.stderr.write(f"                NOTE - Invalid <symb> variable type\n")
+                sys.stderr.write(f"                VAR  - {arg_text} - <{var_type}>, {var_data}\n")
+                sys.exit(53)
 
         # get the var data from the instruction
         elif arg_type in check_type:
-            var_data = arg_text
+            var_data, _ = self.inspect.analyze_arg(arg_text, arg_type)
             var_type = arg_type
         else:
-            sys.stderr.write("Error: - invalid second variable type\n")
-            exit(53)
+            sys.stderr.write(f"[interpret.py]: ERROR (53) - FrameStackProtocol -> symt_get_symb()\n")
+            sys.stderr.write(f"                NOTE - Invalid <symb> variable type\n")
+            sys.stderr.write(f"                VAR  - {arg_text} - <{var_type}>, {var_data}\n")
+            sys.exit(53)
 
         return var_type, var_data
 
@@ -1104,7 +1520,7 @@ class FrameStackProtocol:
         check_type_dict = {
             "arithmetic":       (["int"], ["int"]),
             "logical":          (["bool"], ["bool"]),
-            "relational":       (["string", "int", "bool"], ["string", "int", "bool"]),
+            "relational":       (["string", "int", "bool", "nil"], ["string", "int", "bool", "nil"]),
             "jump":             (["string", "int", "bool"], ["string", "int", "bool"]),
             "string_int":       (["string"], ["int"]),
             "int_string":       (["int"], ["string"]),
@@ -1114,72 +1530,117 @@ class FrameStackProtocol:
         try:
             check_type_1, check_type_2 = check_type_dict[type_option]
         except KeyError:
-            sys.stderr.write("Error: ExecuteInstruction - Private method symtget_arithmetic - invalid type option\n")
-            exit(99)
+            sys.stderr.write(f"[interpret.py]: ERROR (99) - FrameStackProtocol - symt_get_symb1_symb2()\n")
+            sys.stderr.write(f"                NOTE - (Internal error), invalid type_option argument  \n")
+            sys.exit(99)
 
 
         # [1] - get the second var data from the symbol table
         if inst.arg2_type == "var":
             var_type_1, var_data_1 = self.symt_gather_var(inst.arg2_text)
+
+            # check if the variable has a data type
+            if var_type_1 is None:
+                sys.stderr.write(f"[interpret.py]: ERROR (56) - FrameStackProtocol - symt_get_symb1_symb2()\n")
+                sys.stderr.write(f"                NOTE - Variable <symb1> has no data_type\n")
+                sys.stderr.write(f"                VAR  - {inst.arg2_text} - <{var_type_1}>, {var_data_1}\n")
+                sys.stderr.write(f"                INST - [{inst.order}] - {inst.opcode} <{var_type_1}> <{inst.arg3_type}>\n")
+                sys.exit(56)
             
             # check if the variable is int
             if var_type_1 not in check_type_1:
-                sys.stderr.write("Error: - invalid second variable type\n")
-                exit(53)
+                sys.stderr.write(f"[interpret.py]: ERROR (53) - FrameStackProtocol -> symt_get_symb1_symb2()\n")
+                sys.stderr.write(f"                NOTE - Invalid <symb1> variable type\n")
+                sys.stderr.write(f"                VAR  - {inst.arg2_text} - <{var_type_1}>, {var_data_1}\n")
+                sys.stderr.write(f"                INST - {inst.order}. - {inst.opcode} <{var_type_1}> <{inst.arg3_type}>\n")
+                sys.exit(53)
 
-        # get the var data from the instruction
+        # [2] - get the var data from the instruction
         elif inst.arg2_type in check_type_1:
-            var_data_1 = inst.arg2_text
+
+            # analyze the the text variable
+            var_data_1, _ = self.inspect.analyze_arg(inst.arg2_text, inst.arg2_type)
             var_type_1 = inst.arg2_type
         else:
-            sys.stderr.write("Error: - invalid second variable type\n")
-            exit(53)
+            sys.stderr.write(f"[interpret.py]: ERROR (53) - FrameStackProtocol - symt_get_symb1_symb2()\n")
+            sys.stderr.write(f"                NOTE - Invalid <symb1> variable type\n")
+            sys.stderr.write(f"                VAR  - {inst.arg2_text} - <{var_type_1}>, {var_data_1}\n")
+            sys.stderr.write(f"                INST - {inst.order}. - {inst.opcode} <{var_type_1}> <{inst.arg3_type}>\n")
+            sys.exit(53)
 
 
-        # [2] - get the third var data from the symbol table
+        # [3] - get the third var data from the symbol table
         if inst.arg3_type == "var":
             var_type_2, var_data_2 = self.symt_gather_var(inst.arg3_text)
+
+            # check if the variable has a data type
+            if var_type_2 is None:
+                sys.stderr.write(f"[interpret.py]: ERROR (56) - FrameStackProtocol - symt_get_symb1_symb2()\n")
+                sys.stderr.write(f"                NOTE - Variable <symb2> has no data_type\n")
+                sys.stderr.write(f"                VAR  - {inst.arg3_text} - <{var_type_2}>, {var_data_2}\n")
+                sys.stderr.write(f"                INST - [{inst.order}] - {inst.opcode} <{var_type_1}> <{var_type_2}>\n")
+                sys.exit(56)
             
             # they should be the same type  
             if type_similarity == "same":
                 if var_type_2 != var_type_1:
-                    sys.stderr.write("Error: - invalid third variable type\n")
-                    exit(53)
+                    sys.stderr.write(f"[interpret.py]: ERROR (53) - FrameStackProtocol - symt_get_symb1_symb2()\n")
+                    sys.stderr.write(f"                NOTE - Invalid <symb2> variable type\n")
+                    sys.stderr.write(f"                VAR  - {inst.arg3_text} - <{var_type_2}>, {var_data_2}\n")
+                    sys.stderr.write(f"                INST - [{inst.order}] - {inst.opcode} <{var_type_1}> <{var_type_2}>\n")
+                    sys.exit(53)
         
             # they can be different types
             elif type_similarity == "different":
                 if var_type_2 not in check_type_2:
-                    sys.stderr.write("Error: - invalid third variable type\n")
-                    exit(53)
+                    sys.stderr.write(f"[interpret.py]: ERROR (53) - FrameStackProtocol - symt_get_symb1_symb2()\n")
+                    sys.stderr.write(f"                NOTE - Invalid <symb2> variable type\n")
+                    sys.stderr.write(f"                VAR  - {inst.arg3_text} - <{var_type_2}>, {var_data_2}\n")
+                    sys.stderr.write(f"                INST - [{inst.order}] - {inst.opcode} <{var_type_1}> <{var_type_2}>\n")
+                    sys.exit(53)
             
             # internal error wrong type_similarity
             else:
-                sys.stderr.write("Error: ExecuteInstruction - Private method symtget_arithmetic - invalid type similarity\n")
-                exit(99)
+                sys.stderr.write(f"[interpret.py]: ERROR (99) - FrameStackProtocol - symt_get_symb1_symb2()\n")
+                sys.stderr.write(f"                NOTE - (Internal error), invalid type_similarity argument  \n")
+                sys.exit(99)
 
 
-        # [3] - get the third var data from the instruction
+        # [4] - get the third var data from the instruction
         else:
             # they should be the same type
             if type_similarity == "same":
                 if inst.arg3_type == var_type_1:
-                    var_data_2 = inst.arg3_text
+
+                    # analyze the the text variable
+                    var_data_2, _ = self.inspect.analyze_arg(inst.arg3_text, var_type_1)
+                    var_type_2 = var_type_1
                 else:
-                    sys.stderr.write("Error: - invalid second variable type\n")
-                    exit(53)
+                    sys.stderr.write(f"[interpret.py]: ERROR (53) - FrameStackProtocol - symt_get_symb1_symb2()\n")
+                    sys.stderr.write(f"                NOTE - Invalid <symb2> variable type\n")
+                    sys.stderr.write(f"                VAR  - {inst.arg3_text} - <{var_type_2}>, {var_data_2}\n")
+                    sys.stderr.write(f"                INST - [{inst.order}] - {inst.opcode} <{var_type_1}> <{var_type_2}>\n")
+                    sys.exit(53)
             
             # they can be different types
             elif type_similarity == "different":
                 if inst.arg3_type in check_type_2:
-                    var_data_2 = inst.arg3_text
+
+                    # analyze the the text variable
+                    var_data_2, _ = self.inspect.analyze_arg(inst.arg3_text, inst.arg3_type)
+                    var_type_2 = inst.arg3_type
                 else:
-                    sys.stderr.write("Error: - invalid second variable type\n")
-                    exit(53)
+                    sys.stderr.write(f"[interpret.py]: ERROR (53) - FrameStackProtocol - symt_get_symb1_symb2()\n")
+                    sys.stderr.write(f"                NOTE - invalid <symb2> variable type\n")
+                    sys.stderr.write(f"                VAR  - {inst.arg3_text} - <{var_type_2}>, {var_data_2}\n")
+                    sys.stderr.write(f"                INST - [{inst.order}] - {inst.opcode} <{var_type_1}> <{var_type_2}>\n")
+                    sys.exit(53)
             
             # internal error wrong type_similarity
             else:
-                sys.stderr.write("Error: ExecuteInstruction - Private method symtget_arithmetic - invalid type similarity\n")
-                exit(99)
+                sys.stderr.write(f"[interpret.py]: ERROR (99) - FrameStackProtocol - symt_get_symb1_symb2()\n")
+                sys.stderr.write(f"                NOTE - (Internal error), invalid type_similarity argument  \n")
+                sys.exit(99)
             
         return var_type_1, var_data_1, var_type_2, var_data_2 
         
@@ -1205,8 +1666,9 @@ class FrameStack:
             self.__frame_stack.append(symt_tf)
             symt_lf = symt_tf
         else:
-            sys.stderr.write("Error: FrameStack - push_frame_to_stack - no temporary frame\n")
-            exit(55)
+            sys.stderr.write(f"[interpret.py]: ERROR (55) - FrameStack - push_frame()\n")
+            sys.stderr.write(f"                NOTE - Temporary frame doesn't exists, (nothing to push)\n")
+            sys.exit(55)
 
         # returns symt_lf -> new local frame
         return symt_lf
@@ -1227,8 +1689,9 @@ class FrameStack:
         
         # stack is empty
         else:
-            sys.stderr.write("Error: FrameStack - pop_frame_from_stack - stack is empty\n")
-            exit(55)
+            sys.stderr.write(f"[interpret.py]: ERROR (55) - FrameStack - pop_frame()\n")
+            sys.stderr.write(f"                NOTE - Frame stack is empty, (nothing to pop)\n")
+            sys.exit(55)
 
         # returns symt_lf -> new local frame, symt_tf -> popped frame
         return symt_lf, symt_tf        
@@ -1253,8 +1716,10 @@ class SymbolTableData:
         if key not in self.table:
             self.table[key] = (None, None)
         else:
-            sys.stderr.write("Variable already exists \n")
-            exit(52)
+            sys.stderr.write(f"[interpret.py]: ERROR (52) - SymbolTableData - insert_key()\n")
+            sys.stderr.write(f"                NOTE - Variable already exists in the data-frame\n")
+            sys.stderr.write(f"                VAR  - {key}\n")
+            sys.exit(52)
 
     # inserts or replaces the value and the type of the key
     def set_var(self, key, data, data_type):
@@ -1262,8 +1727,10 @@ class SymbolTableData:
             self.table[key] = (data, data_type)
         else:
             # raise an error or handle the case where the key is not found
-            sys.stderr.write("Key not found \n")
-            exit(52)
+            sys.stderr.write(f"[interpret.py]: ERROR (54) - SymbolTableData - set_var()\n")
+            sys.stderr.write(f"                NOTE - Variable not found in the data-frame\n")
+            sys.stderr.write(f"                VAR  - {key} - <{data_type}>, {data}\n")
+            sys.exit(54)
     
     # return the value and the type of the key
     def get_var(self, key):
@@ -1273,8 +1740,10 @@ class SymbolTableData:
             return var_data, var_value
         else:
             # raise an error or handle the case where the key is not found
-            sys.stderr.write("Key not found \n")
-            exit(52)
+            sys.stderr.write(f"[interpret.py]: ERROR (54) - SymbolTableData - set_var()\n")
+            sys.stderr.write(f"                NOTE - Variable not found in the data-frame\n")
+            sys.stderr.write(f"                VAR  - {key}\n")
+            sys.exit(54)
     
     # clears the hash table
     def empty_table(self):
@@ -1303,7 +1772,9 @@ class DataStack:
         if not self.is_empty():
             return self.items.pop()
         else:
-            raise Exception("Stack is empty")
+            sys.stderr.write(f"[interpret.py]: ERROR (56) - DataStack - pop()\n")
+            sys.stderr.write(f"                NOTE - Stack is empty, (nothing to pop)\n")
+            sys.exit(56)
 
     def is_empty(self):
         return len(self.items) == 0
@@ -1332,8 +1803,9 @@ class FuncCallStack:
         if not self.is_empty():
             return self.stack.pop()
         else:
-            sys.stderr.write("Error: FuncCallStack - pop - stack is empty\n")
-            exit(56)
+            sys.stderr.write(f"[interpret.py]: ERROR (56) - FuncCallStack - pop()\n")
+            sys.stderr.write(f"                NOTE - Stack is empty, (nothing to pop)\n")
+            sys.exit(56)
 
     # check if the stack is empty
     def is_empty(self):
@@ -1363,8 +1835,10 @@ class SymbolTableJump:
 
         # if the label is already in the table, raise an error
         if label in self.table:
-            sys.stderr.write("Error: SymbolTableJump - add_label - label already exists\n")
-            exit(52)
+            sys.stderr.write(f"[interpret.py]: ERROR (52) - SymbolTableJump - add_label()\n")
+            sys.stderr.write(f"                NOTE  - Label already exists, can't add new label\n")
+            sys.stderr.write(f"                LABEL - {label}, {inst_order}\n")
+            sys.exit(52)
 
         # add the label to the table
         else:
@@ -1375,13 +1849,23 @@ class SymbolTableJump:
 
         # if the label is not in the table, raise an error
         if label not in self.table:
-            sys.stderr.write("Error: SymbolTableJump - get_label - label not found\n")
-            exit(52)
+            sys.stderr.write(f"[interpret.py]: ERROR (52) - SymbolTableJump - get_label()\n")
+            sys.stderr.write(f"                NOTE  - Label not found, nowhere to jump to\n")
+            sys.stderr.write(f"                LABEL - {label}, None\n")
+            sys.exit(52)
         
         # return the label inst_order
         else:
             return self.table[label]
     
+    # check if label exists in the table
+    def check_label(self, label):
+        if label not in self.table:
+            sys.stderr.write(f"[interpret.py]: ERROR (52) - SymbolTableJump - get_label()\n")
+            sys.stderr.write(f"                NOTE  - Label not found, nowhere to jump to\n")
+            sys.stderr.write(f"                LABEL - {label}, None\n")
+            sys.exit(52)
+
     # clears the table
     def empty_table(self):
         self.table = {}
@@ -1420,23 +1904,12 @@ class DecodeVariables:
 
 if __name__ == "__main__":
 
-    # stdin is not empty
-    if not sys.stdin.isatty():
-        
-        # get input from stdin
-        str_ippcode23_xml = sys.stdin.read()
-
-        # debug - create file with input from stdin
-        with open("ippcode23.xml", "w") as f:
-            f.write(str_ippcode23_xml)
-    
-    # stdin is empty
-    else:
-        # debug - check if str_ippcode23_xml is not empty
-        with open("ippcode23.xml", "r") as f:
-            str_ippcode23_xml = f.read()
-
-
-    # run interpret
+    # initialize the interpret class
     interpret = Interpret()
-    interpret.run_code_xml(str_ippcode23_xml)
+
+    # read arguments -> optional for the user -> if not given the program will run with default values
+    # to note instructions READ won't work because of the missing arguments
+    interpret.read_args()
+
+    # runs the given code the code
+    interpret.run_script()
