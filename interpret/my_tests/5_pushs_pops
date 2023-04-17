@@ -4,7 +4,7 @@
 DEFVAR GF@hello
 DEFVAR GF@world
 MOVE GF@hello string@hello
-MOVE GF@world string@world
+MOVE GF@world string@řetězec\032s\032lomítkem\032\092\032a
 PUSHS GF@hello
 PUSHS GF@world
 PUSHS GF@hello

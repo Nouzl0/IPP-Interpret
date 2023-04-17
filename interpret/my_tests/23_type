@@ -9,7 +9,7 @@ DEFVAR GF@bool
 DEFVAR GF@nil
 
 # move variable
-MOVE GF@string string@hello     # = string
+MOVE GF@string string@hello
 MOVE GF@int int@5
 MOVE GF@bool bool@true
 MOVE GF@nil nil@nil

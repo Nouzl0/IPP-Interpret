@@ -17,7 +17,7 @@ WRITE string@\010
 
 # TF
 POPFRAME
-MOVE TF@var string@hello    # = hello
+MOVE TF@var string@řetězec\032s\032lomítkem\032\092\032a    # = řetězec s lomítkem \ a
 WRITE TF@var
 WRITE string@\010
 

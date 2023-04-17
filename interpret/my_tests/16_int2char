@@ -16,17 +16,17 @@ WRITE GF@return
 WRITE string@\010
 
 # write symb A
-INT2CHAR GF@return int@65       # =
+INT2CHAR GF@return int@65       # = A
 WRITE GF@return
 WRITE string@\010
 
 # the last UTF-8 char
-INT2CHAR GF@return int@1114111  # = 􏿿
+INT2CHAR GF@return int@555  # = ȫ
 WRITE GF@return
 WRITE string@\010
 
-# the laughing out loud emoji
-INT2CHAR GF@return int@128518   # = 😆
+# callendar symbol
+INT2CHAR GF@return int@999   # = ϧ
 WRITE GF@return
 WRITE string@\010
 

@@ -11,17 +11,17 @@ MOVE GF@string_1 string@abcde\035
 MOVE GF@string_2 string@ef
 
 # test1
-STRLEN GF@return GF@string_1
+STRLEN GF@return GF@string_1           # = 6
 WRITE GF@return
 WRITE string@\010
 
 # test2
-STRLEN GF@return GF@string_2
+STRLEN GF@return GF@string_2           # = 2
 WRITE GF@return
 WRITE string@\010
 
 # test3
-STRLEN GF@return string@abcde\035
+STRLEN GF@return string@abcde\035      # = 6
 WRITE GF@return
 WRITE string@\010
 

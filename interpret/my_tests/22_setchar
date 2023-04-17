@@ -18,8 +18,8 @@ WRITE GF@return
 WRITE string@\010
 
 # test 3
-MOVE GF@return string@
-SETCHAR GF@return int@2 string@abc              # = 2
+MOVE GF@return string@2
+SETCHAR GF@return int@0 string@abc              # = a
 WRITE GF@return
 WRITE string@\010
 

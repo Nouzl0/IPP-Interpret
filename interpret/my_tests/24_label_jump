@@ -24,9 +24,6 @@ JUMP two
 LABEL three
 WRITE string@three\010          # = "one\n", "two\n", "three\n"
 
-# error - label not defined
+# error - label not defined     
 JUMP nowhere
-
-# error - label already defined
-LABEL here
 

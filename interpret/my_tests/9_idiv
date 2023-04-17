@@ -28,7 +28,7 @@ WRITE string@\010
 MOVE GF@int_1 int@20
 MOVE GF@int_2 int@10
 IDIV GF@return GF@int_1 GF@int_2
-WRITE GF@return                         # = 200
+WRITE GF@return                         # = 2
 WRITE string@\010
 
 # test 5 big and small int

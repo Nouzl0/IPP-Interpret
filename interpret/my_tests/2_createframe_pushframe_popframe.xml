@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program language="IPPcode23">
+  <instruction order="1" opcode="DEFVAR">
+    <arg1 type="var">GF@var</arg1>
+  </instruction>
+  <instruction order="2" opcode="MOVE">
+    <arg1 type="var">GF@var</arg1>
+    <arg2 type="int">1</arg2>
+  </instruction>
+  <instruction order="3" opcode="CREATEFRAME"/>
+  <instruction order="4" opcode="CREATEFRAME"/>
+  <instruction order="5" opcode="CREATEFRAME"/>
+  <instruction order="6" opcode="PUSHFRAME"/>
+  <instruction order="7" opcode="CREATEFRAME"/>
+  <instruction order="8" opcode="PUSHFRAME"/>
+  <instruction order="9" opcode="CREATEFRAME"/>
+  <instruction order="10" opcode="PUSHFRAME"/>
+  <instruction order="11" opcode="POPFRAME"/>
+  <instruction order="12" opcode="POPFRAME"/>
+  <instruction order="13" opcode="POPFRAME"/>
+  <instruction order="14" opcode="CREATEFRAME"/>
+  <instruction order="15" opcode="PUSHFRAME"/>
+  <instruction order="16" opcode="POPFRAME"/>
+  <instruction order="17" opcode="PUSHFRAME"/>
+  <instruction order="18" opcode="POPFRAME"/>
+  <instruction order="19" opcode="PUSHFRAME"/>
+  <instruction order="20" opcode="POPFRAME"/>
+  <instruction order="21" opcode="PUSHFRAME"/>
+  <instruction order="22" opcode="POPFRAME"/>
+  <instruction order="23" opcode="WRITE">
+    <arg1 type="var">GF@var</arg1>
+  </instruction>
+  <instruction order="24" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="25" opcode="CREATEFRAME"/>
+  <instruction order="26" opcode="DEFVAR">
+    <arg1 type="var">TF@var</arg1>
+  </instruction>
+  <instruction order="27" opcode="MOVE">
+    <arg1 type="var">TF@var</arg1>
+    <arg2 type="int">2</arg2>
+  </instruction>
+  <instruction order="28" opcode="WRITE">
+    <arg1 type="var">TF@var</arg1>
+  </instruction>
+  <instruction order="29" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="30" opcode="PUSHFRAME"/>
+  <instruction order="31" opcode="WRITE">
+    <arg1 type="var">LF@var</arg1>
+  </instruction>
+  <instruction order="32" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="33" opcode="MOVE">
+    <arg1 type="var">LF@var</arg1>
+    <arg2 type="int">3</arg2>
+  </instruction>
+  <instruction order="34" opcode="WRITE">
+    <arg1 type="var">LF@var</arg1>
+  </instruction>
+  <instruction order="35" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="36" opcode="POPFRAME"/>
+  <instruction order="37" opcode="WRITE">
+    <arg1 type="var">TF@var</arg1>
+  </instruction>
+  <instruction order="38" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="39" opcode="PUSHFRAME"/>
+  <instruction order="40" opcode="CREATEFRAME"/>
+  <instruction order="41" opcode="DEFVAR">
+    <arg1 type="var">TF@var</arg1>
+  </instruction>
+  <instruction order="42" opcode="MOVE">
+    <arg1 type="var">TF@var</arg1>
+    <arg2 type="int">4</arg2>
+  </instruction>
+  <instruction order="43" opcode="PUSHFRAME"/>
+  <instruction order="44" opcode="CREATEFRAME"/>
+  <instruction order="45" opcode="PUSHFRAME"/>
+  <instruction order="46" opcode="POPFRAME"/>
+  <instruction order="47" opcode="WRITE">
+    <arg1 type="var">LF@var</arg1>
+  </instruction>
+  <instruction order="48" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="49" opcode="POPFRAME"/>
+  <instruction order="50" opcode="WRITE">
+    <arg1 type="var">TF@var</arg1>
+  </instruction>
+  <instruction order="51" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="52" opcode="WRITE">
+    <arg1 type="var">LF@var</arg1>
+  </instruction>
+  <instruction order="53" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="54" opcode="POPFRAME"/>
+  <instruction order="55" opcode="WRITE">
+    <arg1 type="var">TF@var</arg1>
+  </instruction>
+  <instruction order="56" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="57" opcode="DEFVAR">
+    <arg1 type="var">GF@var1</arg1>
+  </instruction>
+  <instruction order="58" opcode="DEFVAR">
+    <arg1 type="var">GF@var2</arg1>
+  </instruction>
+  <instruction order="59" opcode="DEFVAR">
+    <arg1 type="var">GF@var3</arg1>
+  </instruction>
+  <instruction order="60" opcode="DEFVAR">
+    <arg1 type="var">GF@var4</arg1>
+  </instruction>
+  <instruction order="61" opcode="DEFVAR">
+    <arg1 type="var">GF@var5</arg1>
+  </instruction>
+  <instruction order="62" opcode="DEFVAR">
+    <arg1 type="var">GF@var6</arg1>
+  </instruction>
+  <instruction order="63" opcode="DEFVAR">
+    <arg1 type="var">GF@var7</arg1>
+  </instruction>
+  <instruction order="64" opcode="DEFVAR">
+    <arg1 type="var">GF@var8</arg1>
+  </instruction>
+  <instruction order="65" opcode="DEFVAR">
+    <arg1 type="var">GF@var9</arg1>
+  </instruction>
+  <instruction order="66" opcode="DEFVAR">
+    <arg1 type="var">GF@var10</arg1>
+  </instruction>
+  <instruction order="67" opcode="DEFVAR">
+    <arg1 type="var">GF@var11</arg1>
+  </instruction>
+  <instruction order="68" opcode="DEFVAR">
+    <arg1 type="var">GF@var12</arg1>
+  </instruction>
+  <instruction order="69" opcode="DEFVAR">
+    <arg1 type="var">GF@var13</arg1>
+  </instruction>
+  <instruction order="70" opcode="DEFVAR">
+    <arg1 type="var">GF@var14</arg1>
+  </instruction>
+  <instruction order="71" opcode="DEFVAR">
+    <arg1 type="var">GF@var15</arg1>
+  </instruction>
+  <instruction order="72" opcode="DEFVAR">
+    <arg1 type="var">GF@var16</arg1>
+  </instruction>
+  <instruction order="73" opcode="DEFVAR">
+    <arg1 type="var">GF@var17</arg1>
+  </instruction>
+  <instruction order="74" opcode="DEFVAR">
+    <arg1 type="var">GF@var18</arg1>
+  </instruction>
+  <instruction order="75" opcode="DEFVAR">
+    <arg1 type="var">GF@var19</arg1>
+  </instruction>
+  <instruction order="76" opcode="DEFVAR">
+    <arg1 type="var">GF@var20</arg1>
+  </instruction>
+  <instruction order="77" opcode="MOVE">
+    <arg1 type="var">GF@var17</arg1>
+    <arg2 type="int">17</arg2>
+  </instruction>
+  <instruction order="78" opcode="WRITE">
+    <arg1 type="var">GF@var17</arg1>
+  </instruction>
+  <instruction order="79" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="80" opcode="WRITE">
+    <arg1 type="var">LF@var</arg1>
+  </instruction>
+</program>

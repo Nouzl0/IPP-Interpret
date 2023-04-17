@@ -1,10 +1,11 @@
 .IPPcode23
 
 # init variables
-DEFVAR GF@var
-DEFVAR LF@var
 CREATEFRAME
 PUSHFRAME
+
+DEFVAR GF@var
+DEFVAR LF@var
 
 # tests
 MOVE GF@var nil@nil                                     # = ""
@@ -29,9 +30,6 @@ WRITE string@\010
 
 MOVE GF@var string@This\032is\032a\032string\032long    # = "This is a string long"
 WRITE GF@var
-WRITE string@\010
-
-WRITE LF@var                                            # = ""
 WRITE string@\010
 
 MOVE LF@var GF@var                                      # = "This is a string long"
