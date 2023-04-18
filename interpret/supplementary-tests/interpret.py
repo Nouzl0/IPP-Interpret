@@ -1622,7 +1622,7 @@ class FrameStackProtocol:
 
     # - SET/GET-SYMT - #
 
-    # symt_get_symb():
+    # symt_insert_var():
     # - inserts the variable into the symbol table
     #
     # return error codes:
@@ -1653,7 +1653,7 @@ class FrameStackProtocol:
             sys.stderr.write(f"                FRAME - {var_scope} - Doesn't exists \n")
             sys.exit(55)   
 
-    # symt_get_symb():
+    # symt_update_var():
     # - updates variable in the symbol table
     #
     # return error codes:
@@ -1685,7 +1685,7 @@ class FrameStackProtocol:
             sys.stderr.write(f"                FRAME - {var_scope} - Doesn't exists \n")
             sys.exit(55)   
     
-    # symt_get_symb():
+    # symt_gather_var():
     # - gets variable from the symbol table and returns its value and type
     #
     # return error codes:
@@ -1725,7 +1725,7 @@ class FrameStackProtocol:
         # return the variable data
         return var_type, var_data
 
-    # symt_get_symb():
+    # symt_gather_type():
     # - gets variable type from the symbol table and returns its type (doesn't do any type checking)
     #
     # return error codes:
@@ -1855,7 +1855,7 @@ class FrameStackProtocol:
         return var_type, var_data
 
 
-    # symt_get_var():
+    # symt_get_symb1_symb2():
     # - gets symb1 and symb2 from the symbol table or instruction and returns their value and type
     # - used for easy access to the symbol table and instruction
     #
@@ -2161,6 +2161,7 @@ class SymbolTableData:
             sys.stderr.write(f"                VAR  - {key}\n")
             sys.exit(54)
     
+    # empty_table():
     # clears the hash table
     def empty_table(self):
         self.__table = {}

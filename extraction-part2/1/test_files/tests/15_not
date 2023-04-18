@@ -1,0 +1,27 @@
+.IPPcode23
+
+# init variables
+DEFVAR GF@return
+DEFVAR GF@bool_true
+DEFVAR GF@bool_false
+
+# move bools
+MOVE GF@bool_true bool@true
+MOVE GF@bool_false bool@false
+
+# test 1
+NOT GF@return GF@bool_true      # = false
+WRITE GF@return
+WRITE string@\010
+
+# test 2
+NOT GF@return GF@bool_false     # = true
+WRITE GF@return
+WRITE string@\010
+
+# test 3
+NOT GF@return bool@true         # = false
+WRITE GF@return
+WRITE string@\010
+
+

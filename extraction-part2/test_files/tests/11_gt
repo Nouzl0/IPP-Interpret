@@ -1,0 +1,51 @@
+.IPPcode23
+
+# init variables
+DEFVAR GF@return
+
+# integers
+GT GF@return int@5 int@6                # = false
+WRITE GF@return
+WRITE string@\010
+
+GT GF@return int@6 int@5                # = true
+WRITE GF@return
+WRITE string@\010
+
+GT GF@return int@5 int@5                # = false
+WRITE GF@return
+WRITE string@\010
+WRITE string@\010
+
+# strings
+GT GF@return string@a string@asas       # = false
+WRITE GF@return
+WRITE string@\010
+
+GT GF@return string@asas string@a       # = true
+WRITE GF@return
+WRITE string@\010
+
+GT GF@return string@a string@a          # = false
+WRITE GF@return
+WRITE string@\010
+WRITE string@\010
+
+# bools
+GT GF@return bool@false bool@true       # = false
+WRITE GF@return
+WRITE string@\010
+
+GT GF@return bool@true bool@false       # = true
+WRITE GF@return
+WRITE string@\010
+
+GT GF@return bool@true bool@true        # = false
+WRITE GF@return
+WRITE string@\010
+WRITE string@\010
+
+# errors
+GT GF@return bool@true int@54          # = error
+WRITE GF@return
+WRITE string@\010

@@ -1,0 +1,25 @@
+.IPPcode23
+
+# comment -> all text with # is comment
+# init variables
+DEFVAR GF@return
+
+# test 1
+GETCHAR GF@return string@abcde\035gh int@0
+WRITE GF@return                                 # = a
+WRITE string@\010
+
+# test 2
+GETCHAR GF@return string@abcde\035gh int@7      # = h
+WRITE GF@return
+WRITE string@\010
+
+# test 3
+GETCHAR GF@return string@abcde\035gh int@5      # = "#"
+WRITE GF@return
+WRITE string@\010
+
+# test 4 - error
+GETCHAR GF@return string@abcde\035gh int@9      # = error
+WRITE GF@return
+WRITE string@\010

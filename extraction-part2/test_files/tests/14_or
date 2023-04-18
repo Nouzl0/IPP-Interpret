@@ -1,0 +1,91 @@
+.IPPcode23
+
+# init variables
+DEFVAR GF@return
+DEFVAR GF@bool_true
+DEFVAR GF@bool_false
+DEFVAR GF@int
+
+# move bools
+MOVE GF@bool_true bool@true
+MOVE GF@bool_false bool@false
+MOVE GF@int int@0
+
+
+# no var
+OR GF@return bool@true bool@true           # = true
+WRITE GF@return
+WRITE string@\010
+
+OR GF@return bool@true bool@false          # = true
+WRITE GF@return
+WRITE string@\010
+
+OR GF@return bool@false bool@true          # = true
+WRITE GF@return
+WRITE string@\010
+
+OR GF@return bool@false bool@false         # = false
+WRITE GF@return
+WRITE string@\010
+WRITE string@\010
+
+# one left var
+OR GF@return GF@bool_true bool@true           # = true
+WRITE GF@return
+WRITE string@\010
+
+OR GF@return GF@bool_true bool@false          # = true
+WRITE GF@return
+WRITE string@\010
+
+OR GF@return GF@bool_false bool@true          # = true
+WRITE GF@return
+WRITE string@\010
+
+OR GF@return GF@bool_false bool@false         # = false
+WRITE GF@return
+WRITE string@\010
+WRITE string@\010
+
+# one right var
+OR GF@return bool@true GF@bool_true           # = true
+WRITE GF@return
+WRITE string@\010
+
+OR GF@return bool@true GF@bool_false          # = true
+WRITE GF@return
+WRITE string@\010
+
+OR GF@return bool@false GF@bool_true          # = true
+WRITE GF@return
+WRITE string@\010
+
+OR GF@return bool@false GF@bool_false         # = false
+WRITE GF@return
+WRITE string@\010
+WRITE string@\010
+
+# both vars
+OR GF@return GF@bool_true GF@bool_true           # = true
+WRITE GF@return
+WRITE string@\010
+
+OR GF@return GF@bool_true GF@bool_false          # = true
+WRITE GF@return
+WRITE string@\010
+
+OR GF@return GF@bool_false GF@bool_true          # = true
+WRITE GF@return
+WRITE string@\010
+
+OR GF@return GF@bool_false GF@bool_false         # = false
+WRITE GF@return
+WRITE string@\010
+WRITE string@\010
+
+
+# errors
+OR GF@return bool@true GF@int          # = error
+WRITE GF@return
+WRITE string@\010

@@ -1,0 +1,48 @@
+.IPPcode23
+
+# init variables
+CREATEFRAME
+PUSHFRAME
+
+DEFVAR GF@var
+DEFVAR LF@var
+
+# tests
+MOVE GF@var nil@nil                                     # = ""
+WRITE GF@var
+WRITE string@\010
+
+MOVE GF@var bool@true                                   # = "true"
+WRITE GF@var
+WRITE string@\010
+
+MOVE GF@var bool@false                                  # = "false"
+WRITE GF@var
+WRITE string@\010
+
+MOVE GF@var int@0                                       # = "0"
+WRITE GF@var
+WRITE string@\010
+
+MOVE GF@var string@This\032is\032a\032string            # = "This is a string"
+WRITE GF@var
+WRITE string@\010
+
+MOVE GF@var string@This\032is\032a\032string\032long    # = "This is a string long"
+WRITE GF@var
+WRITE string@\010
+
+MOVE LF@var GF@var                                      # = "This is a string long"
+WRITE LF@var
+WRITE string@\010
+
+WRITE GF@var                                            # = "This is a string long"
+WRITE string@\010
+
+MOVE GF@var LF@var                                      # = "This is a string long"
+WRITE GF@var
+WRITE string@\010
+
+MOVE GF@var GF@not_defined                              # = error
+WRITE GF@var
+WRITE string@\010

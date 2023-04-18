@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program language="IPPcode23">
+  <instruction order="1" opcode="DEFVAR">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="2" opcode="DEFVAR">
+    <arg1 type="var">GF@string_1</arg1>
+  </instruction>
+  <instruction order="3" opcode="DEFVAR">
+    <arg1 type="var">GF@string_2</arg1>
+  </instruction>
+  <instruction order="4" opcode="MOVE">
+    <arg1 type="var">GF@string_1</arg1>
+    <arg2 type="string">abcde\035</arg2>
+  </instruction>
+  <instruction order="5" opcode="MOVE">
+    <arg1 type="var">GF@string_2</arg1>
+    <arg2 type="string">efghij</arg2>
+  </instruction>
+  <instruction order="6" opcode="CONCAT">
+    <arg1 type="var">GF@return</arg1>
+    <arg2 type="var">GF@string_1</arg2>
+    <arg3 type="var">GF@string_2</arg3>
+  </instruction>
+  <instruction order="7" opcode="WRITE">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="8" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="9" opcode="CONCAT">
+    <arg1 type="var">GF@return</arg1>
+    <arg2 type="string">abcde\035</arg2>
+    <arg3 type="string">efghij</arg3>
+  </instruction>
+  <instruction order="10" opcode="WRITE">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="11" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="12" opcode="CONCAT">
+    <arg1 type="var">GF@return</arg1>
+    <arg2 type="var">GF@string_1</arg2>
+    <arg3 type="string">efghij</arg3>
+  </instruction>
+  <instruction order="13" opcode="WRITE">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="14" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="15" opcode="CONCAT">
+    <arg1 type="var">GF@return</arg1>
+    <arg2 type="string">abcde\035</arg2>
+    <arg3 type="var">GF@string_2</arg3>
+  </instruction>
+  <instruction order="16" opcode="WRITE">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="17" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="18" opcode="CONCAT">
+    <arg1 type="var">GF@return</arg1>
+    <arg2 type="var">GF@string_1</arg2>
+    <arg3 type="string">e</arg3>
+  </instruction>
+  <instruction order="19" opcode="WRITE">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="20" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="21" opcode="CONCAT">
+    <arg1 type="var">GF@return</arg1>
+    <arg2 type="var">GF@string_1</arg2>
+    <arg3 type="string"/>
+  </instruction>
+  <instruction order="22" opcode="WRITE">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="23" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="24" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="25" opcode="STRI2INT">
+    <arg1 type="var">GF@return</arg1>
+    <arg2 type="var">GF@string_1</arg2>
+    <arg3 type="nil">nil</arg3>
+  </instruction>
+  <instruction order="26" opcode="WRITE">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="27" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+</program>

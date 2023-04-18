@@ -1,0 +1,20 @@
+.IPPcode23
+
+# comment -> all text with # is comment
+# init variables
+DEFVAR GF@return 
+
+# test 1 - print string int             # = 1
+MOVE GF@return int@1
+DPRINT GF@return
+DPRINT string@\010
+
+# test 2 - print nil                    # = nil
+MOVE GF@return nil@nil
+DPRINT GF@return
+DPRINT string@\010
+
+# test 3 - print bool                   # = true
+MOVE GF@return bool@true
+DPRINT GF@return
+DPRINT string@\010

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program language="IPPcode23">
+  <instruction order="1" opcode="DEFVAR">
+    <arg1 type="var">GF@hello</arg1>
+  </instruction>
+  <instruction order="2" opcode="DEFVAR">
+    <arg1 type="var">GF@world</arg1>
+  </instruction>
+  <instruction order="3" opcode="MOVE">
+    <arg1 type="var">GF@hello</arg1>
+    <arg2 type="string">hello</arg2>
+  </instruction>
+  <instruction order="4" opcode="MOVE">
+    <arg1 type="var">GF@world</arg1>
+    <arg2 type="string">řetězec\032s\032lomítkem\032\092\032a</arg2>
+  </instruction>
+  <instruction order="5" opcode="PUSHS">
+    <arg1 type="var">GF@hello</arg1>
+  </instruction>
+  <instruction order="6" opcode="PUSHS">
+    <arg1 type="var">GF@world</arg1>
+  </instruction>
+  <instruction order="7" opcode="PUSHS">
+    <arg1 type="var">GF@hello</arg1>
+  </instruction>
+  <instruction order="8" opcode="PUSHS">
+    <arg1 type="var">GF@world</arg1>
+  </instruction>
+  <instruction order="9" opcode="DEFVAR">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="10" opcode="POPS">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="11" opcode="WRITE">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="12" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="13" opcode="POPS">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="14" opcode="WRITE">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="15" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="16" opcode="POPS">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="17" opcode="WRITE">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="18" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="19" opcode="POPS">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="20" opcode="WRITE">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="21" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="22" opcode="PUSHS">
+    <arg1 type="int">1</arg1>
+  </instruction>
+  <instruction order="23" opcode="POPS">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="24" opcode="WRITE">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="25" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="26" opcode="PUSHS">
+    <arg1 type="int">-565</arg1>
+  </instruction>
+  <instruction order="27" opcode="POPS">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="28" opcode="WRITE">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="29" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="30" opcode="PUSHS">
+    <arg1 type="nil">nil</arg1>
+  </instruction>
+  <instruction order="31" opcode="POPS">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="32" opcode="WRITE">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="33" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="34" opcode="PUSHS">
+    <arg1 type="bool">true</arg1>
+  </instruction>
+  <instruction order="35" opcode="POPS">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="36" opcode="WRITE">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="37" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="38" opcode="PUSHS">
+    <arg1 type="bool">false</arg1>
+  </instruction>
+  <instruction order="39" opcode="POPS">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="40" opcode="WRITE">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="41" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="42" opcode="MOVE">
+    <arg1 type="var">GF@return</arg1>
+    <arg2 type="int">3465</arg2>
+  </instruction>
+  <instruction order="43" opcode="PUSHS">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="44" opcode="POPS">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="45" opcode="WRITE">
+    <arg1 type="var">GF@return</arg1>
+  </instruction>
+  <instruction order="46" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+</program>

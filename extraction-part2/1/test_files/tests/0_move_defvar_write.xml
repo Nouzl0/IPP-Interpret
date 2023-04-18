@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program language="IPPcode23">
+  <instruction order="1" opcode="DEFVAR">
+    <arg1 type="var">GF@string_1</arg1>
+  </instruction>
+  <instruction order="2" opcode="CREATEFRAME"/>
+  <instruction order="3" opcode="PUSHFRAME"/>
+  <instruction order="4" opcode="DEFVAR">
+    <arg1 type="var">LF@string_2</arg1>
+  </instruction>
+  <instruction order="5" opcode="DEFVAR">
+    <arg1 type="var">LF@small_int</arg1>
+  </instruction>
+  <instruction order="6" opcode="DEFVAR">
+    <arg1 type="var">LF@big_int</arg1>
+  </instruction>
+  <instruction order="7" opcode="DEFVAR">
+    <arg1 type="var">LF@bool_true</arg1>
+  </instruction>
+  <instruction order="8" opcode="DEFVAR">
+    <arg1 type="var">LF@bool_false</arg1>
+  </instruction>
+  <instruction order="9" opcode="DEFVAR">
+    <arg1 type="var">LF@nil</arg1>
+  </instruction>
+  <instruction order="10" opcode="MOVE">
+    <arg1 type="var">GF@string_1</arg1>
+    <arg2 type="string">řetězec\032s\032lomítkem\032\092\032a\010novým\035řádkem</arg2>
+  </instruction>
+  <instruction order="11" opcode="MOVE">
+    <arg1 type="var">LF@string_2</arg1>
+    <arg2 type="string"/>
+  </instruction>
+  <instruction order="12" opcode="MOVE">
+    <arg1 type="var">LF@small_int</arg1>
+    <arg2 type="int">-2147483648</arg2>
+  </instruction>
+  <instruction order="13" opcode="MOVE">
+    <arg1 type="var">LF@big_int</arg1>
+    <arg2 type="int">2147483647</arg2>
+  </instruction>
+  <instruction order="14" opcode="MOVE">
+    <arg1 type="var">LF@bool_true</arg1>
+    <arg2 type="bool">true</arg2>
+  </instruction>
+  <instruction order="15" opcode="MOVE">
+    <arg1 type="var">LF@bool_false</arg1>
+    <arg2 type="bool">false</arg2>
+  </instruction>
+  <instruction order="16" opcode="MOVE">
+    <arg1 type="var">LF@nil</arg1>
+    <arg2 type="nil">nil</arg2>
+  </instruction>
+  <instruction order="17" opcode="WRITE">
+    <arg1 type="string">&lt;string_tests&gt;\010</arg1>
+  </instruction>
+  <instruction order="18" opcode="WRITE">
+    <arg1 type="string">řetězec\032s\032lomítkem\032\092\032a\010novým\035řádkem</arg1>
+  </instruction>
+  <instruction order="19" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="20" opcode="WRITE">
+    <arg1 type="var">GF@string_1</arg1>
+  </instruction>
+  <instruction order="21" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="22" opcode="WRITE">
+    <arg1 type="string"/>
+  </instruction>
+  <instruction order="23" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="24" opcode="WRITE">
+    <arg1 type="var">LF@string_2</arg1>
+  </instruction>
+  <instruction order="25" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="26" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="27" opcode="WRITE">
+    <arg1 type="string">&lt;int_tests&gt;\010</arg1>
+  </instruction>
+  <instruction order="28" opcode="WRITE">
+    <arg1 type="int">0</arg1>
+  </instruction>
+  <instruction order="29" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="30" opcode="WRITE">
+    <arg1 type="int">-2147483648</arg1>
+  </instruction>
+  <instruction order="31" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="32" opcode="WRITE">
+    <arg1 type="var">LF@small_int</arg1>
+  </instruction>
+  <instruction order="33" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="34" opcode="WRITE">
+    <arg1 type="int">2147483647</arg1>
+  </instruction>
+  <instruction order="35" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="36" opcode="WRITE">
+    <arg1 type="var">LF@big_int</arg1>
+  </instruction>
+  <instruction order="37" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="38" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="39" opcode="WRITE">
+    <arg1 type="string">&lt;bool_tests&gt;\010</arg1>
+  </instruction>
+  <instruction order="40" opcode="WRITE">
+    <arg1 type="bool">true</arg1>
+  </instruction>
+  <instruction order="41" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="42" opcode="WRITE">
+    <arg1 type="var">LF@bool_true</arg1>
+  </instruction>
+  <instruction order="43" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="44" opcode="WRITE">
+    <arg1 type="bool">false</arg1>
+  </instruction>
+  <instruction order="45" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="46" opcode="WRITE">
+    <arg1 type="var">LF@bool_false</arg1>
+  </instruction>
+  <instruction order="47" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="48" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="49" opcode="WRITE">
+    <arg1 type="string">&lt;nil_tests&gt;\010</arg1>
+  </instruction>
+  <instruction order="50" opcode="WRITE">
+    <arg1 type="nil">nil</arg1>
+  </instruction>
+  <instruction order="51" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+  <instruction order="52" opcode="WRITE">
+    <arg1 type="var">LF@nil</arg1>
+  </instruction>
+  <instruction order="53" opcode="WRITE">
+    <arg1 type="string">\010</arg1>
+  </instruction>
+</program>
