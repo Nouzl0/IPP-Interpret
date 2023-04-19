@@ -1,0 +1,26 @@
+.IPPcode23
+
+# comment -> all text with # is comment
+# init variables
+DEFVAR GF@return 
+
+# test exit code
+#WRITE string@Hello\032world!
+#WRITE string@\010
+#EXIT int@20                        # echo $? -> 20 - print, "Hello world"
+
+# test exit code var
+#MOVE GF@return int@20
+#EXIT GF@return                      # echo $? -> 20 - print, ""
+#WRITE string@Hello\032world!
+#WRITE string@\010
+
+# test wrong exit code
+#EXIT int@-1                         # echo $? -> 57 - error
+
+# text wrong exit code var          
+#MOVE GF@return int@-1
+#EXIT GF@return                      # echo $? -> 57 - error
+
+# test big exit code
+EXIT int@256                        # echo $? -> 57 - error

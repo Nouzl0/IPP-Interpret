@@ -1,0 +1,60 @@
+.IPPcode23
+
+# comment -> all text with # is comment
+# init variables
+DEFVAR GF@return 
+DEFVAR GF@string
+DEFVAR GF@int
+DEFVAR GF@bool
+DEFVAR GF@nil
+
+# move variable
+MOVE GF@string string@hello
+MOVE GF@int int@5
+MOVE GF@bool bool@true
+MOVE GF@nil nil@nil
+
+# test 1
+TYPE GF@return string@hello     # = string
+WRITE GF@return
+WRITE string@\010
+
+# test 2
+TYPE GF@return GF@string        # = string
+WRITE GF@return
+WRITE string@\010
+
+# test 3
+TYPE GF@return int@5            # = int
+WRITE GF@return
+WRITE string@\010
+
+# test 4
+TYPE GF@return GF@int           # = int
+WRITE GF@return
+WRITE string@\010
+
+# test 5
+TYPE GF@return bool@true        # = bool
+WRITE GF@return
+WRITE string@\010
+
+# test 6
+TYPE GF@return GF@bool          # = bool
+WRITE GF@return
+WRITE string@\010
+
+# test 7
+TYPE GF@return nil@nil          # = nil
+WRITE GF@return
+WRITE string@\010
+
+# test 8
+TYPE GF@return GF@nil           # = nil
+WRITE GF@return
+WRITE string@\010
+
+# test 9
+TYPE GF@return GF@return        # = string
+WRITE GF@return
+WRITE string@\010

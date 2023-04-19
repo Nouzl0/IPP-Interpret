@@ -170,7 +170,7 @@ class Interpret:
             "JUMP" : self.run.execute_jump,                   # Program flow
             "JUMPIFEQ" : self.run.execute_jumpifeq,
             "JUMPIFNEQ" : self.run.execute_jumpifneq,         # Data-stack expansions
-            "JUMPIFEQS" : self.run.execute_jumpifeqs,           
+            "JUMPIFEQS" : self.run.execute_jumpifeqs,
             "JUMPIFNEQS" : self.run.execute_jumpifneqs,
         }
 
@@ -1654,7 +1654,7 @@ class ExecuteInstruction:
         self.data_stack.push(str(var_subs), "int")
 
     # execute_muls():
-    # - takes two variables from the stack and muls them together then pushes the result back to the stack
+    # takes two variables from the stack and muls them together then pushes the result back to the stack
     #
     # return error codes:
     # = 53 - Wrong variable types, expected two same types as second and third argument

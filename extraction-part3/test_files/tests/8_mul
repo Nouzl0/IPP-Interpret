@@ -1,0 +1,46 @@
+.IPPcode23
+
+DEFVAR GF@int_1
+DEFVAR GF@int_2
+DEFVAR GF@return
+
+# test 1
+MOVE GF@int_1 int@1
+MOVE GF@int_2 int@1
+MUL GF@return GF@int_1 GF@int_2
+WRITE GF@return                         # = 1
+WRITE string@\010
+
+# test 2
+MOVE GF@int_2 int@-1                    
+MUL GF@return GF@int_1 GF@int_2
+WRITE GF@return                         # = -1
+WRITE string@\010
+
+# test 3 max int, min int          
+MOVE GF@int_1 int@214748
+MOVE GF@int_2 int@214748
+MUL GF@return GF@int_1 GF@int_2
+WRITE GF@return                         # = 46116703504
+WRITE string@\010                   
+
+# test 4 small and big int
+MOVE GF@int_1 int@20
+MOVE GF@int_2 int@10
+MUL GF@return GF@int_1 GF@int_2
+WRITE GF@return                         # = 200
+WRITE string@\010
+
+# test 5 big and small int
+MOVE GF@int_1 int@10
+MOVE GF@int_2 int@20
+MUL GF@return GF@int_1 GF@int_2
+WRITE GF@return                         # = 200
+WRITE string@\010
+
+# test zero and int
+MOVE GF@int_1 int@0
+MOVE GF@int_2 int@20
+MUL GF@return GF@int_1 GF@int_2
+WRITE GF@return                         # = 0
+WRITE string@\010

@@ -1,0 +1,28 @@
+.IPPcode23
+
+# tests
+# GF
+DEFVAR GF@var
+MOVE GF@var int@100         
+WRITE GF@var                # = 100
+WRITE string@\010
+
+# LF
+CREATEFRAME
+PUSHFRAME
+DEFVAR LF@var
+MOVE GF@var bool@true       # = true
+WRITE GF@var
+WRITE string@\010
+
+# TF
+POPFRAME
+MOVE TF@var string@řetězec\032s\032lomítkem\032\092\032a    # = řetězec s lomítkem \ a
+WRITE TF@var
+WRITE string@\010
+
+# error -> double def
+PUSHFRAME
+DEFVAR LF@var               # = error
+WRITE GF@var  
+WRITE string@\010

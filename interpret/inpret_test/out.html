@@ -13,114 +13,12 @@
 <body>
     <h1 style="text-align: center;">Test result</h1>
     <h2>Tests run: 134</h2>
-    <h2>Passed: 57 </h2>
-    <h2>Failed: 77 </h2>
+    <h2>Passed: 100 </h2>
+    <h2>Failed: 34 </h2>
     <hr>
     <h3 style="text-align: center; color:red">Failed tests</h3><hr><h4>ipp-2023-tests/interpret-only/stack_tests</h4><table><tr><th>Test name</th><th>Return code</th><th>Expected return code</th><th>Output</th><th>Expected output</th></tr>
-<tr><td>stack_adds</td><td>32</td><td>0</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>03</textarea></td></tr>
-
-<tr><td>stack_adds_notint</td><td>32</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
-
-<tr><td>stack_ands</td><td>32</td><td>0</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>truefalsefalsefalse</textarea></td></tr>
-
-<tr><td>stack_ands_notbool</td><td>32</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
-
-<tr><td>stack_clears</td><td>32</td><td>56</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
-
-<tr><td>stack_eqs</td><td>32</td><td>0</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>truetruefalsetruetruefalsefalsefalse</textarea></td></tr>
-
-<tr><td>stack_eqs_differenttype</td><td>32</td><td>53
+<tr><td>stack_eqs_differenttype</td><td>53</td><td>53
 </td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>false</textarea></td></tr>
-
-<tr><td>stack_eqs_differenttype_nil</td><td>32</td><td>0</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>false</textarea></td></tr>
-
-<tr><td>stack_eqs_nil</td><td>32</td><td>0</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>falsetrue</textarea></td></tr>
-
-<tr><td>stack_gts</td><td>32</td><td>0</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>falsefalsefalsefalsefalsetruetruetrue</textarea></td></tr>
-
-<tr><td>stack_gts_differenttype</td><td>32</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
-
-<tr><td>stack_gts_nil</td><td>32</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
-
-<tr><td>stack_idivs</td><td>32</td><td>0</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>-21</textarea></td></tr>
-
-<tr><td>stack_idivs_notint</td><td>32</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
-
-<tr><td>stack_int2chars</td><td>32</td><td>0</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>E</textarea></td></tr>
-
-<tr><td>stack_int2chars_notnumber</td><td>32</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
-
-<tr><td>stack_int2chars_wrongnumber</td><td>32</td><td>58</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
-
-<tr><td>stack_jumpifeqs_bool</td><td>32</td><td>0</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>noice</textarea></td></tr>
-
-<tr><td>stack_jumpifeqs_differenttype</td><td>32</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
-
-<tr><td>stack_jumpifeqs_differenttype_nil</td><td>32</td><td>0
-</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
-
-<tr><td>stack_jumpifeqs_int</td><td>32</td><td>0</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>noice</textarea></td></tr>
-
-<tr><td>stack_jumpifeqs_nil</td><td>32</td><td>0</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>noice</textarea></td></tr>
-
-<tr><td>stack_jumpifeqs_string</td><td>32</td><td>0</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>noice</textarea></td></tr>
-
-<tr><td>stack_jumpifneqs_bool</td><td>32</td><td>0</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>noice</textarea></td></tr>
-
-<tr><td>stack_jumpifneqs_differenttype</td><td>32</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
-
-<tr><td>stack_jumpifneqs_differenttype_nil</td><td>32</td><td>0
-</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>noice</textarea></td></tr>
-
-<tr><td>stack_jumpifneqs_int</td><td>32</td><td>0</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>noice</textarea></td></tr>
-
-<tr><td>stack_jumpifneqs_string</td><td>32</td><td>0</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>noice</textarea></td></tr>
-
-<tr><td>stack_lts</td><td>32</td><td>0</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>truetruetruefalsefalsefalsefalsefalse</textarea></td></tr>
-
-<tr><td>stack_lts_differenttype</td><td>32</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
-
-<tr><td>stack_lts_nil</td><td>32</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
-
-<tr><td>stack_muls</td><td>32</td><td>0</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>-166</textarea></td></tr>
-
-<tr><td>stack_muls_notint</td><td>32</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
-
-<tr><td>stack_nots</td><td>32</td><td>0</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>falsetrue</textarea></td></tr>
-
-<tr><td>stack_nots_notbool</td><td>32</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
-
-<tr><td>stack_ors</td><td>32</td><td>0</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>truetruetruefalse</textarea></td></tr>
-
-<tr><td>stack_ors_notbool</td><td>32</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
-
-<tr><td>stack_stri2ints</td><td>32</td><td>0</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>69</textarea></td></tr>
-
-<tr><td>stack_stri2ints_notnumber</td><td>32</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
-
-<tr><td>stack_stri2ints_notstring</td><td>32</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
-
-<tr><td>stack_stri2ints_outofbounds</td><td>32</td><td>58</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
-
-<tr><td>stack_subs</td><td>32</td><td>0</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50>8-1</textarea></td></tr>
-
-<tr><td>stack_subs_notint</td><td>32</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
-
-</table>
-<hr><h4>ipp-2023-tests/interpret-only/stack_tests/stack_calc</h4><table><tr><th>Test name</th><th>Return code</th><th>Expected return code</th><th>Output</th><th>Expected output</th></tr>
-<tr><td>kalkulacka_STACK_rozsireni</td><td>32</td><td>0</td><td><textarea readonly rows=5 cols=50>Zadejte vaši operaci (+,-,*,/) nebo e pro ukončení:</textarea></td><td><textarea readonly rows=5 cols=50>Zadejte vaši operaci (+,-,*,/) nebo e pro ukončení:Zadejte číslo 1:
-Zadejte číslo 2:
-Váš výsledek: 26
-Zadejte vaši operaci (+,-,*,/) nebo e pro ukončení:Zadejte číslo 1:
-Zadejte číslo 2:
-Váš výsledek: 12
-Zadejte vaši operaci (+,-,*,/) nebo e pro ukončení:Zadejte číslo 1:
-Zadejte číslo 2:
-Váš výsledek: 30
-Zadejte vaši operaci (+,-,*,/) nebo e pro ukončení:Zadejte číslo 1:
-Zadejte číslo 2:
-Váš výsledek: 5
-Zadejte vaši operaci (+,-,*,/) nebo e pro ukončení:</textarea></td></tr>
 
 </table>
 <hr><h4>ipp-2023-tests/interpret-only/float_tests</h4><table><tr><th>Test name</th><th>Return code</th><th>Expected return code</th><th>Output</th><th>Expected output</th></tr>
@@ -249,6 +147,108 @@ Zadejte vaši operaci (+,-,*,/) nebo e pro ukončení:</textarea></td></tr>
 <tr><td>discontinuously_ordered_instructions</td><td>0</td><td><textarea readonly rows=5 cols=50>21cd0abf</textarea></td></tr>
 
 <tr><td>unordered_instructions</td><td>0</td><td><textarea readonly rows=5 cols=50>21cd0abf</textarea></td></tr>
+
+</table>
+<hr><h4>ipp-2023-tests/interpret-only/stack_tests</h4><table><tr><th>Test name</th><th>Return code</th><th>Output</th></tr>
+<tr><td>stack_adds</td><td>0</td><td><textarea readonly rows=5 cols=50>03</textarea></td></tr>
+
+<tr><td>stack_adds_notint</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
+
+<tr><td>stack_ands</td><td>0</td><td><textarea readonly rows=5 cols=50>truefalsefalsefalse</textarea></td></tr>
+
+<tr><td>stack_ands_notbool</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
+
+<tr><td>stack_clears</td><td>56</td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
+
+<tr><td>stack_eqs</td><td>0</td><td><textarea readonly rows=5 cols=50>truetruefalsetruetruefalsefalsefalse</textarea></td></tr>
+
+<tr><td>stack_eqs_differenttype_nil</td><td>0</td><td><textarea readonly rows=5 cols=50>false</textarea></td></tr>
+
+<tr><td>stack_eqs_nil</td><td>0</td><td><textarea readonly rows=5 cols=50>falsetrue</textarea></td></tr>
+
+<tr><td>stack_gts</td><td>0</td><td><textarea readonly rows=5 cols=50>falsefalsefalsefalsefalsetruetruetrue</textarea></td></tr>
+
+<tr><td>stack_gts_differenttype</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
+
+<tr><td>stack_gts_nil</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
+
+<tr><td>stack_idivs</td><td>0</td><td><textarea readonly rows=5 cols=50>-21</textarea></td></tr>
+
+<tr><td>stack_idivs_notint</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
+
+<tr><td>stack_int2chars</td><td>0</td><td><textarea readonly rows=5 cols=50>E</textarea></td></tr>
+
+<tr><td>stack_int2chars_notnumber</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
+
+<tr><td>stack_int2chars_wrongnumber</td><td>58</td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
+
+<tr><td>stack_jumpifeqs_bool</td><td>0</td><td><textarea readonly rows=5 cols=50>noice</textarea></td></tr>
+
+<tr><td>stack_jumpifeqs_differenttype</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
+
+<tr><td>stack_jumpifeqs_differenttype_nil</td><td>0</td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
+
+<tr><td>stack_jumpifeqs_int</td><td>0</td><td><textarea readonly rows=5 cols=50>noice</textarea></td></tr>
+
+<tr><td>stack_jumpifeqs_nil</td><td>0</td><td><textarea readonly rows=5 cols=50>noice</textarea></td></tr>
+
+<tr><td>stack_jumpifeqs_string</td><td>0</td><td><textarea readonly rows=5 cols=50>noice</textarea></td></tr>
+
+<tr><td>stack_jumpifneqs_bool</td><td>0</td><td><textarea readonly rows=5 cols=50>noice</textarea></td></tr>
+
+<tr><td>stack_jumpifneqs_differenttype</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
+
+<tr><td>stack_jumpifneqs_differenttype_nil</td><td>0</td><td><textarea readonly rows=5 cols=50>noice</textarea></td></tr>
+
+<tr><td>stack_jumpifneqs_int</td><td>0</td><td><textarea readonly rows=5 cols=50>noice</textarea></td></tr>
+
+<tr><td>stack_jumpifneqs_string</td><td>0</td><td><textarea readonly rows=5 cols=50>noice</textarea></td></tr>
+
+<tr><td>stack_lts</td><td>0</td><td><textarea readonly rows=5 cols=50>truetruetruefalsefalsefalsefalsefalse</textarea></td></tr>
+
+<tr><td>stack_lts_differenttype</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
+
+<tr><td>stack_lts_nil</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
+
+<tr><td>stack_muls</td><td>0</td><td><textarea readonly rows=5 cols=50>-166</textarea></td></tr>
+
+<tr><td>stack_muls_notint</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
+
+<tr><td>stack_nots</td><td>0</td><td><textarea readonly rows=5 cols=50>falsetrue</textarea></td></tr>
+
+<tr><td>stack_nots_notbool</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
+
+<tr><td>stack_ors</td><td>0</td><td><textarea readonly rows=5 cols=50>truetruetruefalse</textarea></td></tr>
+
+<tr><td>stack_ors_notbool</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
+
+<tr><td>stack_stri2ints</td><td>0</td><td><textarea readonly rows=5 cols=50>69</textarea></td></tr>
+
+<tr><td>stack_stri2ints_notnumber</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
+
+<tr><td>stack_stri2ints_notstring</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
+
+<tr><td>stack_stri2ints_outofbounds</td><td>58</td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
+
+<tr><td>stack_subs</td><td>0</td><td><textarea readonly rows=5 cols=50>8-1</textarea></td></tr>
+
+<tr><td>stack_subs_notint</td><td>53</td><td><textarea readonly rows=5 cols=50></textarea></td></tr>
+
+</table>
+<hr><h4>ipp-2023-tests/interpret-only/stack_tests/stack_calc</h4><table><tr><th>Test name</th><th>Return code</th><th>Output</th></tr>
+<tr><td>kalkulacka_STACK_rozsireni</td><td>0</td><td><textarea readonly rows=5 cols=50>Zadejte vaši operaci (+,-,*,/) nebo e pro ukončení:Zadejte číslo 1:
+Zadejte číslo 2:
+Váš výsledek: 26
+Zadejte vaši operaci (+,-,*,/) nebo e pro ukončení:Zadejte číslo 1:
+Zadejte číslo 2:
+Váš výsledek: 12
+Zadejte vaši operaci (+,-,*,/) nebo e pro ukončení:Zadejte číslo 1:
+Zadejte číslo 2:
+Váš výsledek: 30
+Zadejte vaši operaci (+,-,*,/) nebo e pro ukončení:Zadejte číslo 1:
+Zadejte číslo 2:
+Váš výsledek: 5
+Zadejte vaši operaci (+,-,*,/) nebo e pro ukončení:</textarea></td></tr>
 
 </table>
 <hr><h4>ipp-2023-tests/interpret-only/jumps</h4><table><tr><th>Test name</th><th>Return code</th><th>Output</th></tr>
