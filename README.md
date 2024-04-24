@@ -4,11 +4,11 @@
 - [Requirements](#requirements)
 - [Parser implementation](#parser)
     - [Usage](#usage)
-    - [Aplication design](#aplication-design)
-    - [Aplication overview](#aplication-overview)
+    - [Application design](#application-design)
+    - [Application overview](#application-overview)
 - [Interpret Implelemtation](#interpret)
     - [Usage](#usage)
-    - [Aplication design](#aplication-design-1)
+    - [Application design](#application-design-1)
     - [Other design aspects](#other-design-aspects)
     - [Interpret-Class description](#interpret-class-description)
     - [Description of other subclasses](#description-of-other-subclasses)
@@ -46,7 +46,7 @@ You can also use (--help) to see how to use this script, used like this:
 
 
 
-### Aplication design
+### Appllication design
 The script parse.php is structured around a series of functions that manipulate data. Object oriented programing wasn't used in the script, except of the use of the Document Object Model DOM for creating the XML file. When designing the scripts structure it was considered that the script won't need any complex abstractions or design patterns. Therefore, the script is structured into four simple stages which are part of the main script. The separation of the script's logic mainly comes to dividing a conquering the problem. 
 
 I think it also important to mention that the last stage is the most complicated one so there the logic is separated into functions. Here I preferred minimizing the state (using functions), than chopping the code into smaller pieces. This was mainly done for practical reasons as well as making the code more readable. All the script's functions are exclusively used in the last stage of the script, as mentioned. Down below is a quick description of every mentioned stage and function.
@@ -61,8 +61,8 @@ I think it also important to mention that the last stage is the most complicated
 <br>
 
 
-### Aplication overview
-Aplication works does mainly four thinks:
+### Application overview
+Application works does mainly four thinks:
 
 **1. Parsing program arguments**
 
@@ -113,7 +113,7 @@ In this case the interpret.py executes source from stdin and and all print messa
 <br>
 
 
-### Aplication Design
+### Application Design
 The Interpreter is designed using object-oriented programming (OOP), mainly through composition. The classes that make up the interpret.py file include:
 
  - Interpret           - Manager class which runs the interpret 
