@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# info: used for testing interpret.py
+# usage: ./run.sh <file>
+# example: ./run.sh 0_move_defvar_write
+
+# if file "$1" doesn't exist, exit
+if [ ! -f "$1" ]; then
+    echo "$1"
+    echo " - file doesn't exist"
+    exit 1
+fi
+
+touch "$1.xml"
+
+# get stdin from parse.php and write it to file "$1.xml"
+php parse.php < "$1" > "$1.xml"
+
+# run interpret.py on file "$1.xml"
+python3 interpret.py --source="$1.xml"

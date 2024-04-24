@@ -2,7 +2,7 @@
 
 # info: used for testing interpret.py
 # usage: ./test.sh <file>
-# example: ./test.sh tests/0_move_defvar_write
+# example: ./test.sh 0_move_defvar_write
 
 # if file "$1" doesn't exist, exit
 if [ ! -f "$1" ]; then

@@ -1,8 +1,6 @@
-**Implementační dokumentace k 2. úloze do IPP 2022/2023**
+**Implementační dokumentace k 1. a 2. úloze do IPP 2022/2023**
 
 **Jméno a příjmení:** Nikolas Nosál
-
-**Login:** xnosal01
 
 # Introduction
 

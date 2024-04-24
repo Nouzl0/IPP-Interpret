@@ -2,8 +2,6 @@
 
 **Jméno a příjmení:** Nikolas Nosál
 
-**Login:** xnosal01
-
 ## Introduction
 
 This document provides instructions for using a parse.php parsing script which creates XML file.
